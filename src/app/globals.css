@@ -1,0 +1,417 @@
+@import "tailwindcss";
+
+:root {
+  --background: #ffffff;
+  --foreground: #0b1220;
+}
+
+@theme {
+  /* The single HAX accent, used for CTAs, active states and system status. */
+  --color-hax: #2457f5;
+  --color-hax-dark: #1b45d6;
+  --color-hax-soft: #eef3ff;
+  --color-ink: #0b1220;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+}
+
+html {
+  /* Keep in-page anchor targets clear of the sticky header (h-18). */
+  scroll-padding-top: 5rem;
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-sans), sans-serif;
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-hax);
+  outline-offset: 2px;
+}
+
+::selection {
+  background: var(--color-hax-soft);
+}
+
+/* Faint dot grid used behind the hero and final CTA. */
+.dot-grid {
+  background-image: radial-gradient(circle, var(--color-slate-300) 1px, transparent 1px);
+  background-size: 28px 28px;
+  mask-image: radial-gradient(ellipse 70% 65% at 50% 0%, #000 30%, transparent 100%);
+}
+
+/* ---------------------------------------------------------------------------
+ * Hero
+ * ------------------------------------------------------------------------- */
+
+.hero-display {
+  font-size: clamp(2.75rem, 11vw, 7rem);
+  font-weight: 700;
+  line-height: 0.94;
+  letter-spacing: -0.045em;
+  max-width: 18ch;
+  margin: 0 auto 22px;
+}
+
+.hero-dot {
+  display: inline-block;
+  width: 0.16em;
+  height: 0.16em;
+  margin-left: 0.06em;
+  border-radius: 9999px;
+  background: var(--color-hax);
+}
+
+.hero-cursor {
+  display: inline-block;
+  width: 2.5px;
+  height: 0.84em;
+  margin-left: 2px;
+  vertical-align: -0.04em;
+  border-radius: 1px;
+  background: var(--color-hax);
+  animation: hero-cursor-blink 0.85s ease infinite;
+}
+
+@keyframes hero-cursor-blink {
+  0%,
+  45% {
+    opacity: 1;
+  }
+  50%,
+  95% {
+    opacity: 0;
+  }
+}
+
+.hero-float {
+  animation: hero-bob 7s ease-in-out infinite;
+}
+
+@keyframes hero-bob {
+  50% {
+    translate: 0 -9px;
+  }
+}
+
+/*
+ * Hero devices: three phones that fan out as the page scrolls.
+ * --fan runs 0 → 1 (set by <HeroDevices>); all sizes derive from --dev-w.
+ */
+.hero-devices {
+  --dev-w: 260px;
+  --fan: 1;
+  position: relative;
+  z-index: 2;
+  display: flex;
+  justify-content: center;
+  margin-top: 22px;
+}
+
+.hero-devices::before {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  left: 50%;
+  top: 50%;
+  width: calc(var(--dev-w) * 4.1);
+  height: calc(var(--dev-w) * 1.72);
+  transform: translate(-50%, -50%) scaleX(calc(0.63 + 0.37 * var(--fan)));
+  border-radius: 50%;
+  background: radial-gradient(
+    closest-side,
+    rgb(36 87 245 / 0.2) 0%,
+    rgb(36 87 245 / 0.15) 26%,
+    rgb(36 87 245 / 0.1) 48%,
+    rgb(36 87 245 / 0.05) 68%,
+    rgb(36 87 245 / 0.015) 85%,
+    rgb(36 87 245 / 0) 100%
+  );
+  pointer-events: none;
+}
+
+.device {
+  --dev-frame: calc(var(--dev-w) * 0.046);
+  --dev-radius: calc(var(--dev-w) * 0.17);
+  position: relative;
+  width: var(--dev-w);
+  padding: var(--dev-frame);
+  background: #1a1a1a;
+  border-radius: var(--dev-radius);
+  box-shadow: 0 14px 40px rgb(18 18 18 / 0.1);
+}
+
+/* Dynamic island */
+.device::before {
+  content: "";
+  position: absolute;
+  top: calc(var(--dev-frame) + var(--dev-w) * 0.032);
+  left: 50%;
+  z-index: 3;
+  width: calc(var(--dev-w) * 0.29);
+  height: calc(var(--dev-w) * 0.082);
+  transform: translateX(-50%);
+  border-radius: 9999px;
+  background: #1a1a1a;
+}
+
+.device--lead {
+  z-index: 1;
+}
+
+.device--left,
+.device--right {
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  z-index: 0;
+  transform-origin: center bottom;
+  will-change: transform;
+  box-shadow: 0 14px 40px rgb(18 18 18 / calc(0.1 * var(--fan)));
+}
+
+.device--left {
+  transform: translateX(-50%) translateX(calc(var(--dev-w) * -0.62 * var(--fan)))
+    rotate(calc(-13deg * var(--fan)));
+}
+
+.device--right {
+  transform: translateX(-50%) translateX(calc(var(--dev-w) * 0.62 * var(--fan)))
+    rotate(calc(13deg * var(--fan)));
+}
+
+.device-screen {
+  position: relative;
+  aspect-ratio: 9 / 19.5;
+  overflow: hidden;
+  padding-top: calc(var(--dev-w) * 0.138);
+  border-radius: calc(var(--dev-radius) - var(--dev-frame));
+  background: #fff;
+  text-align: left;
+}
+
+.device-status {
+  position: absolute;
+  inset: 0 0 auto;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: calc(var(--dev-w) * 0.146);
+  padding: 0 calc(var(--dev-w) * 0.048) 0 calc(var(--dev-w) * 0.065);
+  color: var(--color-ink);
+}
+
+.device--dark .device-status {
+  color: #fff;
+}
+
+.device-time {
+  font-size: calc(var(--dev-w) * 0.039);
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  line-height: 1;
+}
+
+.device-icons {
+  display: flex;
+  align-items: center;
+  gap: calc(var(--dev-w) * 0.019);
+}
+
+.device-icons svg {
+  display: block;
+  height: calc(var(--dev-w) * 0.027);
+  width: auto;
+}
+
+.device-side {
+  position: absolute;
+  z-index: 1;
+  width: calc(var(--dev-w) * 0.011);
+  border-radius: 9999px;
+  background: #1a1a1a;
+}
+
+.device-side--left {
+  left: calc(var(--dev-w) * -0.008);
+  top: calc(var(--dev-w) * 0.3);
+  height: calc(var(--dev-w) * 0.1);
+}
+
+.device-side--left::before,
+.device-side--left::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  width: 100%;
+  border-radius: inherit;
+  background: inherit;
+}
+
+.device-side--left::before {
+  top: calc(var(--dev-w) * 0.155);
+  height: calc(var(--dev-w) * 0.175);
+}
+
+.device-side--left::after {
+  top: calc(var(--dev-w) * 0.375);
+  height: calc(var(--dev-w) * 0.175);
+}
+
+.device-side--right {
+  right: calc(var(--dev-w) * -0.008);
+  top: calc(var(--dev-w) * 0.42);
+  height: calc(var(--dev-w) * 0.28);
+}
+
+@media (max-width: 600px) {
+  .hero-display {
+    font-size: clamp(1.9rem, 8.4vw, 2.4rem);
+    line-height: 1;
+    letter-spacing: -0.035em;
+    margin-bottom: 16px;
+  }
+
+  /* Screens are designed at 260px; scale the whole group down on phones. */
+  .hero-devices {
+    zoom: 0.73;
+  }
+
+  /* Wide enough that the interactive left phone's buttons stay reachable. */
+  .device--left {
+    transform: translateX(-50%) translateX(calc(var(--dev-w) * -0.42 * var(--fan)))
+      rotate(calc(-9deg * var(--fan)));
+  }
+
+  .device--right {
+    transform: translateX(-50%) translateX(calc(var(--dev-w) * 0.42 * var(--fan)))
+      rotate(calc(9deg * var(--fan)));
+  }
+
+  /* On phones the interactive website phone swaps to the front so its
+     buttons are fully tappable; the dashboard takes the left slot. */
+  .device--mobile-lead {
+    position: relative;
+    bottom: auto;
+    left: auto;
+    z-index: 1;
+    transform: none;
+    box-shadow: 0 14px 40px rgb(18 18 18 / 0.1);
+  }
+
+  .device--mobile-left {
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    z-index: 0;
+    transform-origin: center bottom;
+    transform: translateX(-50%) translateX(calc(var(--dev-w) * -0.42 * var(--fan)))
+      rotate(calc(-9deg * var(--fan)));
+  }
+}
+
+/* Hero CTA nudge: a short shake 2s after load, then every 6s. Pauses while
+   the visitor hovers or focuses it. */
+.cta-shake {
+  animation: cta-shake 6s ease-in-out 2s infinite;
+}
+
+.cta-shake:hover,
+.cta-shake:focus-visible {
+  animation-play-state: paused;
+}
+
+@keyframes cta-shake {
+  0%,
+  12%,
+  100% {
+    transform: translateX(0) rotate(0);
+  }
+  2% {
+    transform: translateX(-5px) rotate(-1.5deg);
+  }
+  4% {
+    transform: translateX(5px) rotate(1.5deg);
+  }
+  6% {
+    transform: translateX(-4px) rotate(-1deg);
+  }
+  8% {
+    transform: translateX(3px) rotate(0.5deg);
+  }
+  10% {
+    transform: translateX(-1px);
+  }
+}
+
+/* Something new just arrived in a demo (enquiry sent, dashboard updated). */
+.demo-pop {
+  animation: demo-pop 450ms cubic-bezier(0.2, 0.7, 0.2, 1) both;
+}
+
+@keyframes demo-pop {
+  from {
+    opacity: 0;
+    transform: translateY(-4px) scale(0.97);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .demo-pop,
+  .cta-shake {
+    animation: none;
+  }
+
+  .hero-devices {
+    --fan: 1 !important;
+  }
+
+  .hero-float {
+    animation: none;
+  }
+
+  .hero-cursor {
+    display: none;
+  }
+}
+
+/*
+ * Scroll-triggered reveals, driven by <Reveal> setting data-reveal="visible".
+ * Children opt in with data-reveal-item / data-reveal-bar and are staggered
+ * with the --reveal-index custom property. Reduced-motion users see the
+ * final state immediately.
+ */
+@media (prefers-reduced-motion: no-preference) {
+  [data-reveal] [data-reveal-item] {
+    opacity: 0;
+    translate: 0 10px;
+    transition:
+      opacity 500ms ease,
+      translate 500ms ease;
+    transition-delay: calc(var(--reveal-index, 0) * 140ms);
+  }
+
+  [data-reveal="visible"] [data-reveal-item] {
+    opacity: 1;
+    translate: 0 0;
+  }
+
+  [data-reveal] [data-reveal-bar] {
+    scale: 1 0;
+    transform-origin: bottom;
+    transition: scale 700ms cubic-bezier(0.2, 0.7, 0.2, 1);
+    transition-delay: calc(var(--reveal-index, 0) * 60ms + 200ms);
+  }
+
+  [data-reveal="visible"] [data-reveal-bar] {
+    scale: 1 1;
+  }
+}
