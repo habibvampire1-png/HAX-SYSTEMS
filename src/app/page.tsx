@@ -13,9 +13,9 @@ export default function HomePage() {
       <ProblemSection />
       <SolutionsSection />
       <CtaSection
-        title="Every business needs a system. Let's build yours."
-        description="Tell us how your business runs today. We'll show you exactly what to fix first."
-        note="Not sure what you need? That's exactly where we start."
+        title="Stop losing customers to missed calls."
+        description="Book a 15-minute call. I'll tell you what I'd fix first, and what it would cost."
+        note="Not sure what you need? That's where we start."
       />
     </main>
   );

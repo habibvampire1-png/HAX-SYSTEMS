@@ -13,27 +13,27 @@ import SectionHeading from "@/components/ui/SectionHeading";
 const problems: { title: string; symptom: string; icon: IconComponent }[] = [
   {
     title: "Missed calls",
-    symptom: "The phone rings while you're busy. That customer calls someone else.",
+    symptom: "The phone rings while you're busy. That customer rings someone else.",
     icon: PhoneIcon,
   },
   {
     title: "Slow replies",
-    symptom: "An enquiry waits hours for an answer. By then, they've booked elsewhere.",
+    symptom: "An enquiry waits hours for a reply. By then, they've booked elsewhere.",
     icon: ClockIcon,
   },
   {
     title: "Manual bookings",
-    symptom: "Appointments live in notes, texts and spreadsheets.",
+    symptom: "Appointments live in notes, texts and spreadsheets. Some get lost.",
     icon: ClipboardIcon,
   },
   {
     title: "No follow-up",
-    symptom: "Happy customers never hear from you again — so they don't come back.",
+    symptom: "Happy customers never hear from you again, so they don't come back.",
     icon: BellIcon,
   },
   {
     title: "Repetitive admin",
-    symptom: "Your team retypes the same details, every single day.",
+    symptom: "You retype the same details, every single day.",
     icon: RepeatIcon,
   },
   {
@@ -51,11 +51,11 @@ export default function ProblemSection() {
           <SectionHeading
             id="problem-heading"
             eyebrow="The problem"
-            title="Customers are slipping through the cracks."
-            description="Missed calls, slow replies and manual bookings quietly cost you work. You don't need more software. You need a better system."
+            title="Every missed call is a customer who rings someone else."
+            description="Missed calls, slow replies and manual bookings quietly cost you jobs. You don't need more software. You need a system that catches every customer."
           />
           <p className="mt-8 border-l-2 border-hax pl-4 font-medium text-ink">
-            We find the weak point first. Then we fix it.
+            I find where you&rsquo;re losing customers first. Then I fix it.
           </p>
         </div>
 

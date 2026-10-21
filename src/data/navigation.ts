@@ -1,10 +1,15 @@
 import type { NavDropdownMenu, NavGroup, NavItem, NavLink } from "@/types";
-import { CONTACT_CONFIG } from "@/constants";
 import { getSolutionHref, solutions } from "@/data/solutions";
 
 export const primaryCta: NavLink = {
-  label: "Book a System Review",
+  label: "Book a 15-minute call",
   href: "/book",
+};
+
+/** Lead-magnet entry point. Points at the booking flow until the demo form ships. */
+export const demoCta: NavLink = {
+  label: "Hear a free demo for your business",
+  href: "/book?service=ai-calling",
 };
 
 export const solutionsMenu: NavDropdownMenu = {
@@ -24,17 +29,6 @@ export const mainNavigation: NavItem[] = [
   { type: "link", label: "About", href: "/about" },
 ];
 
-const contactLinks: NavLink[] = [primaryCta];
-if (CONTACT_CONFIG.email) {
-  contactLinks.push({
-    label: CONTACT_CONFIG.email,
-    href: `mailto:${CONTACT_CONFIG.email}`,
-  });
-}
-if (CONTACT_CONFIG.linkedinUrl) {
-  contactLinks.push({ label: "LinkedIn", href: CONTACT_CONFIG.linkedinUrl });
-}
-
 export const footerNavigation: NavGroup[] = [
   {
     title: "Solutions",
@@ -51,7 +45,6 @@ export const footerNavigation: NavGroup[] = [
       { label: "About", href: "/about" },
     ],
   },
-  { title: "Contact", links: contactLinks },
 ];
 
 export const legalNavigation: NavLink[] = [

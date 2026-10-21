@@ -14,9 +14,9 @@ export default function SolutionsSection() {
         <SectionHeading
           id="solutions-heading"
           align="center"
-          eyebrow="The solution"
-          title="One system that captures, answers, books and follows up."
-          description="We build only what your business needs, and connect it so it keeps working while you work."
+          eyebrow="What I build"
+          title="Answer every call. Book every job. Follow up every time."
+          description="You get only what your business needs, all connected, so it keeps working while you work."
         />
         <div className="mt-14 grid gap-5 md:grid-cols-2">
           {solutions.map((solution) => (

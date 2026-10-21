@@ -3,10 +3,11 @@
 import { useEffect, useRef, useState, type FormEvent } from "react";
 import ChoiceChip from "@/components/booking/ChoiceChip";
 import BookingProgress from "@/components/booking/BookingProgress";
-import { CalendarIcon, CheckIcon } from "@/components/ui/icons";
+import ResponsePromise from "@/components/trust/ResponsePromise";
+import { SendIcon } from "@/components/ui/icons";
+import { DISPLAY_TIME_ZONE, getPublicContact } from "@/config/site";
 import { bookingServiceOptions } from "@/data/booking";
-import { submitBookingRequest } from "@/lib/booking";
-import { schedulingProvider } from "@/lib/scheduling";
+import { buildBookingMailto, submitBookingRequest, type BookingRequest } from "@/lib/booking";
 import type { BookingServiceId } from "@/types";
 
 const STEPS = ["What you need", "Time", "Your details"];
@@ -49,7 +50,7 @@ export default function BookingFlow({ initialService }: BookingFlowProps) {
   const [times, setTimes] = useState<string[]>([]);
   const [details, setDetails] = useState<Details>({ name: "", business: "", contact: "", notes: "" });
   const [errors, setErrors] = useState<DetailErrors>({});
-  const [status, setStatus] = useState<"editing" | "submitting" | "not-configured">("editing");
+  const [status, setStatus] = useState<"editing" | "submitting" | "handoff">("editing");
 
   const headingRef = useRef<HTMLHeadingElement>(null);
   const hasNavigated = useRef(false);
@@ -86,40 +87,58 @@ export default function BookingFlow({ initialService }: BookingFlowProps) {
     if (!service) return;
 
     setStatus("submitting");
-    const result = await submitBookingRequest({
-      service,
-      schedule: {
-        days,
-        times,
-        timeZone: Intl.DateTimeFormat().resolvedOptions().timeZone,
-      },
-      ...details,
-    });
+    const result = await submitBookingRequest(buildRequest(service));
     hasNavigated.current = true;
-    // Only "not-configured" is possible until a real integration exists.
-    setStatus(result.status === "sent" ? "editing" : "not-configured");
+    // Until server delivery exists the visitor sends the request by email.
+    setStatus(result.status === "sent" ? "editing" : "handoff");
+  }
+
+  function buildRequest(selected: BookingServiceId): BookingRequest {
+    return {
+      service: selected,
+      schedule: { days, times, timeZone: DISPLAY_TIME_ZONE },
+      ...details,
+    };
   }
 
   const selectedService = bookingServiceOptions.find((option) => option.id === service);
+  const { email } = getPublicContact();
 
-  if (status === "not-configured") {
+  if (status === "handoff" && service) {
+    const mailto = email
+      ? buildBookingMailto(email, buildRequest(service), selectedService?.label ?? service)
+      : null;
+
     return (
       <div className="p-6 sm:p-8">
         <span className="flex size-12 items-center justify-center rounded-full bg-hax-soft text-hax">
-          <CheckIcon className="size-6" strokeWidth={2.5} />
+          <SendIcon className="size-6" />
         </span>
         <h2 ref={headingRef} tabIndex={-1} className="mt-5 text-2xl font-semibold tracking-tight text-ink outline-none">
-          Your request is ready.
+          One last step: send it to me.
         </h2>
         <p className="mt-3 text-slate-600">
-          Online booking is still being connected, so this request hasn&rsquo;t
-          been sent yet.
+          Your request has not been sent yet. Press the button to open your
+          email with your answers already filled in, then hit send.
         </p>
+        {mailto ? (
+          <a
+            href={mailto}
+            className="mt-5 inline-flex h-12 items-center justify-center rounded-full bg-hax px-6 text-base font-medium text-white shadow-sm shadow-hax/20 transition-colors hover:bg-hax-dark"
+          >
+            Open email to Habib
+          </a>
+        ) : (
+          <p role="alert" className="mt-5 text-sm text-red-700">
+            Sorry, sending isn&rsquo;t available right now. Please try again later.
+          </p>
+        )}
+        <ResponsePromise className="mt-3" />
         <dl className="mt-6 divide-y divide-slate-100 rounded-2xl border border-slate-200 text-sm">
           {[
             ["Help with", selectedService?.label],
             ["Preferred days", days.length ? days.join(", ") : "No preference"],
-            ["Preferred times", times.length ? times.join(", ") : "No preference"],
+            ["Preferred times (Irish time)", times.length ? times.join(", ") : "No preference"],
             ["Name", details.name],
             ["Business", details.business],
             ["Contact", details.contact],
@@ -192,13 +211,9 @@ export default function BookingFlow({ initialService }: BookingFlowProps) {
             <h2 ref={headingRef} tabIndex={-1} className="text-2xl font-semibold tracking-tight text-ink outline-none">
               Choose a date and time
             </h2>
-            {schedulingProvider === null && (
-              <p className="mt-4 flex gap-3 rounded-xl border border-slate-200 bg-slate-50 p-4 text-sm text-slate-600">
-                <CalendarIcon className="size-5 shrink-0 text-hax" />
-                Live calendar booking is being connected. For now, tell us
-                what usually suits you and we&rsquo;ll confirm a time with you.
-              </p>
-            )}
+            <p className="mt-2 text-slate-600">
+              Pick the days and times that suit you. I&rsquo;ll confirm an exact time.
+            </p>
 
             <fieldset className="mt-6">
               <legend className="text-sm font-semibold text-ink">Preferred days</legend>
@@ -237,8 +252,8 @@ export default function BookingFlow({ initialService }: BookingFlowProps) {
                 ))}
               </div>
               <p className="mt-3 text-xs text-slate-500">
-                Your time zone: {Intl.DateTimeFormat().resolvedOptions().timeZone}.
-                Leave blank if you have no preference.
+                All times are Irish time (Europe/Dublin). Leave blank if you have no
+                preference.
               </p>
             </fieldset>
 
@@ -252,6 +267,7 @@ export default function BookingFlow({ initialService }: BookingFlowProps) {
               Where should we reach you?
             </h2>
             <p className="mt-2 text-slate-600">Just the essentials.</p>
+            <ResponsePromise className="mt-1" />
 
             <div className="mt-6 grid gap-5 sm:grid-cols-2">
               <TextField
@@ -281,7 +297,7 @@ export default function BookingFlow({ initialService }: BookingFlowProps) {
               />
               <div className="sm:col-span-2">
                 <label htmlFor="booking-notes" className="text-sm font-medium text-ink">
-                  What should we know before the call?{" "}
+                  What should I know before the call?{" "}
                   <span className="font-normal text-slate-500">(optional)</span>
                 </label>
                 <textarea
@@ -298,7 +314,7 @@ export default function BookingFlow({ initialService }: BookingFlowProps) {
 
             <StepActions
               onBack={() => goTo(1)}
-              nextLabel={status === "submitting" ? "Sending…" : "Request My System Review"}
+              nextLabel={status === "submitting" ? "Sending…" : "Book my 15-minute call"}
               nextType="submit"
               nextDisabled={status === "submitting"}
             />

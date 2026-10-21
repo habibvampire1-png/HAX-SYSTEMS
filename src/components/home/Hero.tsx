@@ -1,9 +1,10 @@
 import Container from "@/components/layout/Container";
 import HeroDevices from "@/components/home/HeroDevices";
-import HeroTypewriter from "@/components/home/HeroTypewriter";
+import IndustrySelector from "@/components/home/IndustrySelector";
+import TrustLine from "@/components/trust/TrustLine";
 import ButtonLink from "@/components/ui/ButtonLink";
 import { MonitorIcon, PhoneIcon, type IconComponent } from "@/components/ui/icons";
-import { primaryCta } from "@/data/navigation";
+import { demoCta, primaryCta } from "@/data/navigation";
 
 function FloatingChip({
   icon: Icon,
@@ -52,38 +53,31 @@ export default function Hero() {
         </div>
 
         <h1 id="hero-heading" className="hero-display relative z-[1] text-ink">
-          <span className="sr-only">
-            Every business needs a system — a website, AI agent, CRM,
-            dashboard, workflow or follow-up. We build it.
-          </span>
-          <span aria-hidden>
-            Every business
-            <br />
-            needs a <HeroTypewriter />
-            <span className="hero-dot" />
-          </span>
+          Never miss
+          <br />
+          another customer
+          <span className="hero-dot" />
         </h1>
 
-        <div className="relative z-[1] mx-auto max-w-[46ch]">
-          <p className="mx-auto mb-[22px] max-w-[min(70vw,300px)] text-sm leading-[1.55] text-slate-600 sm:mb-[30px] sm:max-w-none sm:text-[1.0625rem] sm:leading-[1.6]">
-            <span className="sm:hidden">
-              We find where you&rsquo;re losing customers — and build the
-              system that wins them back.
-            </span>
-            <span className="hidden sm:inline">
-              We find where your business is losing customers and time, then
-              build the website, AI calling and automation that fix it — all
-              connected, all working for you.
-            </span>
+        <div className="relative z-[1] mx-auto mt-5 max-w-[46ch] sm:mt-7">
+          <p className="mb-6 text-base leading-[1.55] text-slate-600 sm:mb-8 sm:text-[1.0625rem] sm:leading-[1.6]">
+            We set up AI receptionists, booking and follow-up systems for Irish
+            businesses — so every call and enquiry gets answered, even when
+            you&rsquo;re busy.
           </p>
 
-          <ButtonLink href={primaryCta.href} size="lg" className="min-w-[150px] px-[38px]">
-            {primaryCta.label}
-          </ButtonLink>
-          <p className="mt-3 text-sm text-slate-500">
-            One conversation. A clear plan. No technical jargon.
-          </p>
+          <div className="flex flex-col items-stretch justify-center gap-3 sm:flex-row sm:items-center">
+            <ButtonLink href={demoCta.href} size="lg" className="px-7">
+              {demoCta.label}
+            </ButtonLink>
+            <ButtonLink href={primaryCta.href} size="lg" variant="secondary" className="px-7">
+              {primaryCta.label}
+            </ButtonLink>
+          </div>
+          <TrustLine className="mt-4" />
         </div>
+
+        <IndustrySelector />
 
         <p className="sr-only">
           Below: three phones. A business website that captures enquiries, the

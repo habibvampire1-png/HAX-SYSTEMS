@@ -1,5 +1,6 @@
 import Container from "@/components/layout/Container";
 import ButtonLink from "@/components/ui/ButtonLink";
+import ResponsePromise from "@/components/trust/ResponsePromise";
 import { primaryCta } from "@/data/navigation";
 import type { NavLink } from "@/types";
 
@@ -10,6 +11,8 @@ type CtaSectionProps = {
   secondary?: NavLink;
   /** Short reassurance line under the buttons. */
   note?: string;
+  /** Show the reply-time promise under the buttons. */
+  showResponsePromise?: boolean;
 };
 
 /** Closing call to action used at the end of the homepage and inner pages. */
@@ -19,6 +22,7 @@ export default function CtaSection({
   primary = primaryCta,
   secondary,
   note,
+  showResponsePromise = true,
 }: CtaSectionProps) {
   return (
     <section aria-labelledby="cta-heading" className="relative isolate overflow-hidden border-t border-slate-200">
@@ -41,7 +45,8 @@ export default function CtaSection({
             </ButtonLink>
           )}
         </div>
-        {note && <p className="mt-4 text-sm text-slate-500">{note}</p>}
+        {note && <p className="mt-4 text-sm text-slate-600">{note}</p>}
+        {showResponsePromise && <ResponsePromise className="mt-2" />}
       </Container>
     </section>
   );

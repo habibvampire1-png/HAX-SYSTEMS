@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
-import { SITE_CONFIG } from "@/constants";
+import { SITE_CONFIG } from "@/config/site";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -18,14 +18,14 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_CONFIG.url),
   title: {
-    default: `${SITE_CONFIG.name} | Digital Systems for Businesses`,
+    default: `${SITE_CONFIG.name} | AI Receptionists & Booking Systems for Irish Businesses`,
     template: `%s | ${SITE_CONFIG.name}`,
   },
   description: SITE_CONFIG.description,
   openGraph: {
     type: "website",
     siteName: SITE_CONFIG.name,
-    title: `${SITE_CONFIG.name} | Digital Systems for Businesses`,
+    title: `${SITE_CONFIG.name} | AI Receptionists & Booking Systems for Irish Businesses`,
     description: SITE_CONFIG.description,
     url: "/",
   },

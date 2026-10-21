@@ -5,15 +5,15 @@ import { Eyebrow } from "@/components/ui/SectionHeading";
 import { isBookingServiceId } from "@/data/booking";
 
 export const metadata: Metadata = {
-  title: "Book a System Review",
+  title: "Book a 15-minute call",
   description:
-    "Tell us how your business works and we'll recommend which system to fix first. It takes about a minute.",
+    "Tell me how your business handles calls and enquiries and I'll tell you what I'd fix first. It takes about a minute.",
 };
 
 const nextSteps = [
-  "We read your answers before the call.",
-  "We confirm a time that suits you.",
-  "A clear conversation about what to fix first — no technical jargon.",
+  "I read your answers before the call.",
+  "I confirm a time that suits you, in Irish time.",
+  "We talk for 15 minutes about what to fix first. No jargon.",
 ];
 
 export default async function BookPage(props: PageProps<"/book">) {
@@ -24,12 +24,12 @@ export default async function BookPage(props: PageProps<"/book">) {
     <main>
       <Container className="grid gap-12 pt-14 pb-20 sm:pt-20 sm:pb-28 lg:grid-cols-[5fr_7fr] lg:gap-16">
         <div>
-          <Eyebrow>System review</Eyebrow>
+          <Eyebrow>Talk to the founder</Eyebrow>
           <h1 className="mt-3 text-4xl leading-[1.08] font-semibold tracking-tight text-balance text-ink sm:text-5xl">
-            Book a System Review
+            Book a 15-minute call
           </h1>
           <p className="mt-5 text-lg leading-relaxed text-slate-600">
-            Tell us what you need help with. It takes about a minute.
+            Tell me what you need help with. It takes about a minute.
           </p>
           <h2 className="mt-10 text-sm font-semibold text-ink">What happens next</h2>
           <ol className="mt-4 space-y-3">

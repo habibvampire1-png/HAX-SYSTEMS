@@ -3,12 +3,12 @@ import Container from "@/components/layout/Container";
 import CtaSection from "@/components/shared/CtaSection";
 import FounderCard from "@/components/shared/FounderCard";
 import PageIntro from "@/components/shared/PageIntro";
-import { SITE_CONFIG } from "@/constants";
+import { LOCATION_LABEL, SITE_CONFIG } from "@/config/site";
 
 export const metadata: Metadata = {
-  title: "About",
+  title: "About Habib Ali and HAX Systems",
   description:
-    "HAX Systems reviews how a business works and builds the digital system that solves the problem.",
+    "HAX Systems is run by Habib Ali from Dunshaughlin, Co. Meath. You deal with the founder directly, from first call to go-live.",
 };
 
 const principles = [
@@ -24,12 +24,12 @@ export default function AboutPage() {
     <main>
       <PageIntro
         eyebrow={`About ${SITE_CONFIG.name}`}
-        title="Businesses don't need more disconnected tools. They need systems that work together."
-        description="HAX Systems reviews how a business works, identifies where customers, time or opportunities are being lost, and builds the digital system that solves the problem."
+        title="You deal with me directly."
+        description="HAX Systems is run by me, Habib Ali. I look at how your business handles calls and enquiries, then build what fixes it."
       />
       <Container className="grid gap-12 pb-20 sm:pb-28 lg:grid-cols-[7fr_5fr] lg:gap-20">
         <div>
-          <h2 className="text-2xl font-semibold tracking-tight text-ink">How we think</h2>
+          <h2 className="text-2xl font-semibold tracking-tight text-ink">How I work</h2>
           <ol className="mt-6 divide-y divide-slate-200 border-y border-slate-200">
             {principles.map((principle, index) => (
               <li key={principle} className="flex gap-5 py-5 text-lg text-slate-700">
@@ -44,11 +44,28 @@ export default function AboutPage() {
           <div className="mt-6">
             <FounderCard />
           </div>
+          {/* TODO(habib): review and personalise this story. It is written only
+              from what is known about the business, with no invented history. */}
+          <div className="mt-6 space-y-4 text-lg leading-relaxed text-slate-700">
+            <p>
+              I&rsquo;m {SITE_CONFIG.founder}, and I run {SITE_CONFIG.name} from {LOCATION_LABEL}.
+            </p>
+            <p>
+              Most small businesses don&rsquo;t lose customers because the work is poor. They lose
+              them because the phone rang while someone was busy, or an enquiry waited too long
+              for a reply.
+            </p>
+            <p>
+              I set up AI receptionists, booking and follow-up systems so that doesn&rsquo;t
+              happen. I also build websites that turn visitors into enquiries.
+            </p>
+            <p>You&rsquo;ll deal with me directly, from the first call to the day it goes live.</p>
+          </div>
         </div>
       </Container>
       <CtaSection
-        title="Every business needs a system. Let's build yours."
-        description="Start with a review of how your business currently works."
+        title="Let's find where you're losing customers."
+        description="A 15-minute call. I'll tell you what I'd fix first."
       />
     </main>
   );

@@ -7,7 +7,7 @@ export const solutions: Solution[] = [
     navDescription: "Websites built to turn visitors into customers.",
     card: {
       title: "Websites That Bring Business",
-      copy: "Websites that turn visitors into enquiries and bookings — not just pretty pages.",
+      copy: "Websites that turn visitors into calls, enquiries and bookings — not just nice-looking pages.",
       cta: "Explore Website Systems",
     },
     headline: "Websites built to turn visitors into customers.",
@@ -30,12 +30,12 @@ export const solutions: Solution[] = [
     navDescription: "Answer, qualify and book callers — even after hours.",
     card: {
       title: "Never Miss a Call",
-      copy: "An AI agent answers, qualifies and books callers — even when your team can't pick up.",
+      copy: "An AI receptionist answers every call, takes the details and books the job — even when you can't pick up.",
       cta: "Explore AI Calling",
     },
     headline: "Never lose a customer because nobody answered the phone.",
     intro:
-      "When your team is busy or the business is closed, an AI agent answers the call, finds out what the caller needs and books them in.",
+      "When you're busy or the business is closed, an AI receptionist answers the call, finds out what the caller needs and books them in.",
     includes: [
       "Answer incoming calls",
       "Answer routine questions",
@@ -53,7 +53,7 @@ export const solutions: Solution[] = [
     navDescription: "Follow-ups, reminders and routine work handled for you.",
     card: {
       title: "Keep the Business Moving",
-      copy: "Follow-ups, reminders and review requests go out on time, every time — automatically.",
+      copy: "Reminders, follow-ups and review requests go out on time, every time, without you lifting a finger.",
       cta: "Explore Automation",
     },
     headline: "Stay active without doing everything manually.",
@@ -76,7 +76,7 @@ export const solutions: Solution[] = [
     navDescription: "Systems built around how your business actually works.",
     card: {
       title: "Built Around Your Workflow",
-      copy: "We map how your business runs, then build the system it actually needs.",
+      copy: "I look at how your business runs, then build the tools it actually needs.",
       cta: "Explore Business Systems",
     },
     headline:
