@@ -162,7 +162,7 @@ export const industries: Industry[] = [
     slug: "garages",
     label: "Garage & Automotive",
     plural: "garages and automotive businesses",
-    headline: "You can't answer the phone while you're under a car. Your receptionist can.",
+    headline: "You can't answer the phone while you're under a car. An AI receptionist can.",
     subhead:
       "An AI receptionist answers every call, takes the details of the job and books the car in, so you stop losing work to missed calls.",
     metaDescription:
