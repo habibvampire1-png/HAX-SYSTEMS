@@ -1,7 +1,9 @@
 import type { Metadata } from "next";
 import BookingFlow from "@/components/booking/BookingFlow";
+import CalendarEmbed from "@/components/booking/CalendarEmbed";
 import Container from "@/components/layout/Container";
 import { Eyebrow } from "@/components/ui/SectionHeading";
+import { CALENDAR_URL } from "@/config/site";
 import { isBookingServiceId } from "@/data/booking";
 import { sanitizeBusinessName } from "@/lib/businessName";
 
@@ -46,8 +48,11 @@ export default async function BookPage(props: PageProps<"/book">) {
           </ol>
         </div>
 
-        <div className="rounded-3xl border border-slate-200 bg-white shadow-xl shadow-slate-900/[0.05]">
-          <BookingFlow initialService={initialService} initialBusiness={initialBusiness} />
+        <div>
+          <div className="rounded-3xl border border-slate-200 bg-white shadow-xl shadow-slate-900/[0.05]">
+            <BookingFlow initialService={initialService} initialBusiness={initialBusiness} />
+          </div>
+          {CALENDAR_URL && <CalendarEmbed calendarUrl={CALENDAR_URL} />}
         </div>
       </Container>
     </main>

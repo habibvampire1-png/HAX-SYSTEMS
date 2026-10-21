@@ -137,7 +137,7 @@ export const OFFERS = {
 /* ------------------------------------------------------------------ */
 
 /** e.g. a Cal.com link. */
-export const CALENDAR_URL = "";
+export const CALENDAR_URL: string = "";
 
 /** Times are always shown in Irish time, not the visitor's. */
 export const DISPLAY_TIME_ZONE = "Europe/Dublin";
