@@ -1,5 +1,5 @@
 import { SITE_CONFIG } from "@/config/site";
-import { packages } from "@/config/pricing";
+import { VAT_REGISTERED, packages } from "@/config/pricing";
 
 /** schema.org Offer data for the three packages: a one-off setup fee plus a monthly fee. */
 export default function PackagesJsonLd() {
@@ -22,7 +22,7 @@ export default function PackagesJsonLd() {
             name: "Setup fee",
             price: item.setupEur,
             priceCurrency: "EUR",
-            valueAddedTaxIncluded: false,
+            ...(VAT_REGISTERED && { valueAddedTaxIncluded: false }),
           },
           {
             "@type": "UnitPriceSpecification",
@@ -30,7 +30,7 @@ export default function PackagesJsonLd() {
             price: item.monthlyEur,
             priceCurrency: "EUR",
             unitCode: "MON",
-            valueAddedTaxIncluded: false,
+            ...(VAT_REGISTERED && { valueAddedTaxIncluded: false }),
           },
         ],
       },

@@ -1,6 +1,6 @@
 /**
- * Single source of truth for public pricing. All amounts are in EUR and are
- * shown without VAT. Change a number here and every page, the lead emails and
+ * Single source of truth for public pricing. All amounts are in EUR. Change a
+ * number here and every page, the lead emails and
  * the structured data update together.
  */
 
@@ -95,6 +95,12 @@ export const pricingTrustLine = [
   "Cancel monthly plans anytime",
   "Call minutes and text messages beyond your plan charged at cost",
 ];
+
+/**
+ * Set to true once HAX Systems is VAT registered. The pricing page then says
+ * "Prices exclude VAT." Until then it only says prices are in euro.
+ */
+export const VAT_REGISTERED: boolean = false;
 
 /** Turn on to show the founding-client banner on the pricing page. */
 export const FOUNDING_OFFER = {

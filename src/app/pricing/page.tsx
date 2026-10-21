@@ -7,6 +7,7 @@ import PackagesJsonLd from "@/components/pricing/PackagesJsonLd";
 import PricingTrustLine from "@/components/pricing/PricingTrustLine";
 import WebsitePricing from "@/components/pricing/WebsitePricing";
 import { Eyebrow } from "@/components/ui/SectionHeading";
+import { VAT_REGISTERED } from "@/config/pricing";
 import { SITE_CONFIG } from "@/config/site";
 
 export const metadata: Metadata = {
@@ -26,7 +27,7 @@ export default function PricingPage() {
           Simple pricing. Fixed before we start.
         </h1>
         <p className="mx-auto mt-5 max-w-2xl text-lg leading-relaxed text-slate-600 sm:text-xl">
-          One setup fee, then a monthly plan. All prices are in euro, without VAT.
+          One setup fee, then a monthly plan. {VAT_REGISTERED ? "Prices exclude VAT." : "All prices are in euro."}
         </p>
         <FoundingBanner />
       </Container>
