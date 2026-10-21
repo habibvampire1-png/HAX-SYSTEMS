@@ -33,10 +33,10 @@ export const LOCATION_LABEL = `${LOCATION.locality}, ${LOCATION.county}, ${LOCAT
 export const FLAGS = {
   /** Show the contact email site-wide. */
   CONTACT_EMAIL_ENABLED: true,
-  /** The number is not live yet. While false, every phone / tel: link is hidden. */
-  PHONE_ENABLED: false,
-  /** Show the WhatsApp click-to-chat button. Keep false until the number is live. */
-  WHATSAPP_ENABLED: false,
+  /** While false, no phone number or tel: link renders anywhere on the site. */
+  PHONE_ENABLED: true,
+  /** While false, no WhatsApp link renders anywhere on the site. */
+  WHATSAPP_ENABLED: true,
   /** The free personalised demo lead magnet. */
   DEMO_OFFER_ENABLED: true,
   /** The 14-day free trial block. Only switch on once you can honour the guarantee. */
@@ -50,8 +50,11 @@ export const FLAGS = {
 const CONTACT_DETAILS = {
   email: "habib@haxsystems.com",
   phone: "+353 89 408 7717",
+  /** Irish-style display format of the phone number. */
+  phoneDisplay: "089 408 7717",
   /** WhatsApp uses the same number. */
   whatsapp: "+353 89 408 7717",
+  whatsappMessage: "Hi HAX Systems, I'd like to know more about your services.",
   /** Add only a real, approved URL. */
   linkedinUrl: null as string | null,
 };
@@ -61,7 +64,7 @@ export const RESPONSE_PROMISE = "I reply within 1 working day.";
 
 export type PublicContact = {
   email: string | null;
-  phone: { display: string; href: string } | null;
+  phone: { display: string; href: string; e164: string } | null;
   whatsapp: { display: string; href: string } | null;
   linkedinUrl: string | null;
 };
@@ -76,14 +79,17 @@ export function getPublicContact(): PublicContact {
     email: FLAGS.CONTACT_EMAIL_ENABLED ? CONTACT_DETAILS.email : null,
     phone: FLAGS.PHONE_ENABLED
       ? {
-          display: CONTACT_DETAILS.phone,
+          display: CONTACT_DETAILS.phoneDisplay,
           href: `tel:+${digitsOnly(CONTACT_DETAILS.phone)}`,
+          e164: `+${digitsOnly(CONTACT_DETAILS.phone)}`,
         }
       : null,
     whatsapp: FLAGS.WHATSAPP_ENABLED
       ? {
           display: CONTACT_DETAILS.whatsapp,
-          href: `https://wa.me/${digitsOnly(CONTACT_DETAILS.whatsapp)}`,
+          href: `https://wa.me/${digitsOnly(CONTACT_DETAILS.whatsapp)}?text=${encodeURIComponent(
+            CONTACT_DETAILS.whatsappMessage,
+          )}`,
         }
       : null,
     linkedinUrl: CONTACT_DETAILS.linkedinUrl,

@@ -3,9 +3,13 @@ import DesktopNav from "@/components/layout/DesktopNav";
 import Logo from "@/components/layout/Logo";
 import MobileNav from "@/components/layout/MobileNav";
 import ButtonLink from "@/components/ui/ButtonLink";
+import { PhoneIcon } from "@/components/ui/icons";
+import { getPublicContact } from "@/config/site";
 import { primaryCta } from "@/data/navigation";
 
 export default function Header() {
+  const { phone } = getPublicContact();
+
   return (
     <header className="sticky top-0 z-50">
       {/* Glass background on its own layer: backdrop-filter on the header
@@ -16,12 +20,22 @@ export default function Header() {
       />
       <Container className="flex h-18 items-center justify-between lg:grid lg:grid-cols-[1fr_auto_1fr] lg:gap-6">
         <div className="justify-self-start">
-          <Logo />
+          <Logo size="header" />
         </div>
 
         <DesktopNav />
 
-        <div className="hidden justify-self-end lg:block">
+        <div className="hidden items-center gap-5 justify-self-end lg:flex">
+          {phone && (
+            <a
+              href={phone.href}
+              className="inline-flex items-center gap-2 rounded-md text-sm font-semibold text-ink transition-colors hover:text-hax"
+            >
+              <PhoneIcon className="size-4 text-hax" />
+              <span className="sr-only">Call </span>
+              {phone.display}
+            </a>
+          )}
           <ButtonLink href={primaryCta.href} className="cta-shake">
             {primaryCta.label}
           </ButtonLink>

@@ -12,7 +12,7 @@ export default function Footer() {
       <Container className="py-14 lg:py-16">
         <div className="grid gap-12 lg:grid-cols-[1.4fr_2fr]">
           <div>
-            <Logo />
+            <Logo size="footer" />
             <p className="mt-4 max-w-xs text-base text-slate-600">
               AI receptionists, booking and follow-up systems for Irish businesses.
             </p>
@@ -66,6 +66,8 @@ export default function Footer() {
                   <li>
                     <a
                       href={contact.whatsapp.href}
+                      target="_blank"
+                      rel="noopener noreferrer"
                       className="rounded-sm transition-colors hover:text-ink"
                     >
                       WhatsApp

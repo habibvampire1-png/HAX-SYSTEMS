@@ -102,7 +102,7 @@ export default function BookingFlow({ initialService }: BookingFlowProps) {
   }
 
   const selectedService = bookingServiceOptions.find((option) => option.id === service);
-  const { email } = getPublicContact();
+  const { email, phone, whatsapp } = getPublicContact();
 
   if (status === "handoff" && service) {
     const mailto = email
@@ -134,6 +134,28 @@ export default function BookingFlow({ initialService }: BookingFlowProps) {
           </p>
         )}
         <ResponsePromise className="mt-3" />
+        {(phone || whatsapp) && (
+          <p className="mt-2 text-sm text-slate-600">
+            In a hurry?{" "}
+            {phone && (
+              <a href={phone.href} className="font-medium text-hax underline">
+                Call {phone.display}
+              </a>
+            )}
+            {phone && whatsapp && " or "}
+            {whatsapp && (
+              <a
+                href={whatsapp.href}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="font-medium text-hax underline"
+              >
+                message me on WhatsApp
+              </a>
+            )}
+            .
+          </p>
+        )}
         <dl className="mt-6 divide-y divide-slate-100 rounded-2xl border border-slate-200 text-sm">
           {[
             ["Help with", selectedService?.label],

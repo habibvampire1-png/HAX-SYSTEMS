@@ -3,7 +3,7 @@ import Container from "@/components/layout/Container";
 import CtaSection from "@/components/shared/CtaSection";
 import FounderCard from "@/components/shared/FounderCard";
 import PageIntro from "@/components/shared/PageIntro";
-import { LOCATION_LABEL, SITE_CONFIG } from "@/config/site";
+import { LOCATION_LABEL, SITE_CONFIG, getPublicContact } from "@/config/site";
 
 export const metadata: Metadata = {
   title: "About Habib Ali and HAX Systems",
@@ -20,6 +20,8 @@ const principles = [
 ];
 
 export default function AboutPage() {
+  const { email, phone, whatsapp } = getPublicContact();
+
   return (
     <main>
       <PageIntro
@@ -61,6 +63,38 @@ export default function AboutPage() {
             </p>
             <p>You&rsquo;ll deal with me directly, from the first call to the day it goes live.</p>
           </div>
+          <h2 className="mt-10 text-2xl font-semibold tracking-tight text-ink">Get in touch</h2>
+          <ul className="mt-4 space-y-2 text-lg text-slate-700">
+            {email && (
+              <li>
+                Email:{" "}
+                <a href={`mailto:${email}`} className="font-medium text-hax underline">
+                  {email}
+                </a>
+              </li>
+            )}
+            {phone && (
+              <li>
+                Phone:{" "}
+                <a href={phone.href} className="font-medium text-hax underline">
+                  {phone.display}
+                </a>
+              </li>
+            )}
+            {whatsapp && (
+              <li>
+                <a
+                  href={whatsapp.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="font-medium text-hax underline"
+                >
+                  Message me on WhatsApp
+                </a>
+              </li>
+            )}
+            <li>{LOCATION_LABEL}</li>
+          </ul>
         </div>
       </Container>
       <CtaSection
