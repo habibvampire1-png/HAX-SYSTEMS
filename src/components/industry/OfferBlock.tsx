@@ -1,14 +1,19 @@
 import PersonalisedLink from "@/components/industry/PersonalisedLink";
 import { CheckIcon } from "@/components/ui/icons";
-import { FLAGS, OFFERS, PRICING, formatFromPrice } from "@/config/site";
+import { formatEur, getPackage } from "@/config/pricing";
+import { FLAGS, OFFERS } from "@/config/site";
 import { demoCta, getDemoHref } from "@/data/navigation";
 
 /** The offer: free demo, optional 14-day trial, and the pricing line. All wording comes from the site config. */
 export default function OfferBlock({ industry }: { industry?: string }) {
+  const receptionist = getPackage("ai-receptionist");
+  const receptionistPrice = receptionist
+    ? `AI Receptionist: ${formatEur(receptionist.setupEur)} setup, then ${formatEur(receptionist.monthlyEur)}/month. Fixed price, agreed before work starts.`
+    : "Fixed price, agreed before work starts.";
   const points = [
     ...(FLAGS.DEMO_OFFER_ENABLED ? [OFFERS.demo.promise] : []),
     ...(FLAGS.TRIAL_OFFER_ENABLED ? [`${OFFERS.trial.title}. ${OFFERS.trial.guarantee}`] : []),
-    formatFromPrice(PRICING.AI_RECEPTIONIST_FROM_PRICE_EUR),
+    receptionistPrice,
   ];
 
   return (

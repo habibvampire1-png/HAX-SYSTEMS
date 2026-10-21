@@ -3,6 +3,7 @@ import BookingFlow from "@/components/booking/BookingFlow";
 import CalendarEmbed from "@/components/booking/CalendarEmbed";
 import Container from "@/components/layout/Container";
 import { Eyebrow } from "@/components/ui/SectionHeading";
+import { getPackage } from "@/config/pricing";
 import { CALENDAR_URL } from "@/config/site";
 import { isBookingServiceId } from "@/data/booking";
 import { sanitizeBusinessName } from "@/lib/businessName";
@@ -20,7 +21,8 @@ const nextSteps = [
 ];
 
 export default async function BookPage(props: PageProps<"/book">) {
-  const { service, b } = await props.searchParams;
+  const { service, b, package: pkg } = await props.searchParams;
+  const initialPackage = getPackage(typeof pkg === "string" ? pkg : undefined)?.id;
   const initialBusiness = sanitizeBusinessName(typeof b === "string" ? b : undefined) ?? undefined;
   const initialService = isBookingServiceId(service) ? service : undefined;
 
@@ -50,7 +52,11 @@ export default async function BookPage(props: PageProps<"/book">) {
 
         <div>
           <div className="rounded-3xl border border-slate-200 bg-white shadow-xl shadow-slate-900/[0.05]">
-            <BookingFlow initialService={initialService} initialBusiness={initialBusiness} />
+            <BookingFlow
+              initialService={initialService}
+              initialBusiness={initialBusiness}
+              initialPackage={initialPackage}
+            />
           </div>
           {CALENDAR_URL && <CalendarEmbed calendarUrl={CALENDAR_URL} />}
         </div>

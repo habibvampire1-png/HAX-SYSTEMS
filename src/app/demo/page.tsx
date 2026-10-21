@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import DemoForm from "@/components/demo/DemoForm";
 import Container from "@/components/layout/Container";
 import { Eyebrow } from "@/components/ui/SectionHeading";
+import { getPackage } from "@/config/pricing";
 import { OFFERS } from "@/config/site";
 import { industries } from "@/data/industries";
 import { DEMO_INDUSTRY_OTHER } from "@/lib/leadSchema";
@@ -25,7 +26,8 @@ const industryOptions = [
 ];
 
 export default async function DemoPage(props: PageProps<"/demo">) {
-  const { b, industry } = await props.searchParams;
+  const { b, industry, package: pkg } = await props.searchParams;
+  const selectedPackage = getPackage(typeof pkg === "string" ? pkg : undefined);
   const initialBusiness = sanitizeBusinessName(typeof b === "string" ? b : undefined) ?? undefined;
   const initialIndustry =
     typeof industry === "string" && industryOptions.some((option) => option.value === industry)
@@ -58,6 +60,7 @@ export default async function DemoPage(props: PageProps<"/demo">) {
           <DemoForm
             initialBusiness={initialBusiness}
             initialIndustry={initialIndustry}
+            selectedPackage={selectedPackage ? { id: selectedPackage.id, name: selectedPackage.name } : undefined}
             industryOptions={industryOptions}
           />
         </div>

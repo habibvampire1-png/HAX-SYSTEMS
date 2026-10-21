@@ -21,7 +21,7 @@ All business facts, flags and claims live in `src/config/site.ts`. Nothing else 
 | `FLAGS.CONTACT_EMAIL_ENABLED` | Shows the contact email site-wide. |
 | `FLAGS.DEMO_OFFER_ENABLED` / `TRIAL_OFFER_ENABLED` | Lead-magnet offers. The trial is off until you can honour its guarantee. |
 | `CRO_NUMBER` | Shown in the footer only when non-empty. |
-| `PRICING.*` | Leave `null` to show "Clear fixed pricing — agreed before any work starts". |
+| Pricing | Lives in `src/config/pricing.ts` (packages, website prices, trust line, `FOUNDING_OFFER` flag). |
 | `CLAIMS.*` | GDPR / EU hosting / integration claims render only when true. |
 
 ## Lead delivery (Resend)

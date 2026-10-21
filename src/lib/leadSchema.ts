@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { PACKAGE_IDS } from "@/config/pricing";
 import { industries } from "@/data/industries";
 
 /** Must match the ids in src/data/booking.ts. */
@@ -27,6 +28,9 @@ const contactField = z
     "Please enter a valid email address or phone number.",
   );
 
+/** The pricing package the visitor was looking at, if any. */
+const packageField = z.enum(PACKAGE_IDS).optional();
+
 /** Honeypot: hidden from people, so only bots fill it in. */
 const honeypot = z.string().max(500).optional().default("");
 
@@ -42,6 +46,7 @@ export const bookingLeadSchema = z.object({
   business: z.string().trim().min(1, "Please enter your business name.").max(120),
   contact: contactField,
   notes: z.string().trim().max(2000).default(""),
+  package: packageField,
   companyWebsite: honeypot,
 });
 
@@ -55,6 +60,7 @@ export const demoLeadSchema = z.object({
   business: z.string().trim().min(1, "Please enter your business name.").max(120),
   industry: z.string().refine((value) => demoIndustryValues.includes(value), "Please choose your industry."),
   contact: contactField,
+  package: packageField,
   companyWebsite: honeypot,
 });
 

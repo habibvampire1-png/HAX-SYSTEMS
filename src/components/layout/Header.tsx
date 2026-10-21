@@ -32,8 +32,10 @@ export default function Header() {
               className="inline-flex items-center gap-2 rounded-md text-sm font-semibold text-ink transition-colors hover:text-hax"
             >
               <PhoneIcon className="size-4 text-hax" />
-              <span className="sr-only">Call </span>
-              {phone.display}
+              <span className="sr-only xl:not-sr-only xl:whitespace-nowrap">
+                <span className="sr-only">Call </span>
+                {phone.display}
+              </span>
             </a>
           )}
           <ButtonLink href={primaryCta.href} className="cta-shake">

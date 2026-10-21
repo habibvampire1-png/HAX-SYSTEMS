@@ -25,6 +25,7 @@ export const solutionsMenu: NavDropdownMenu = {
 export const mainNavigation: NavItem[] = [
   { type: "dropdown", ...solutionsMenu },
   { type: "link", label: "How It Works", href: "/process" },
+  { type: "link", label: "Pricing", href: "/pricing" },
   { type: "link", label: "Work", href: "/work" },
   { type: "link", label: "About", href: "/about" },
 ];
@@ -41,6 +42,7 @@ export const footerNavigation: NavGroup[] = [
     title: "Company",
     links: [
       { label: "How It Works", href: "/process" },
+      { label: "Pricing", href: "/pricing" },
       { label: "Work", href: "/work" },
       { label: "About", href: "/about" },
     ],

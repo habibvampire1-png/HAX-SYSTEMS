@@ -1,5 +1,6 @@
 import "server-only";
 import { LEAD_RECIPIENT_EMAIL, SITE_CONFIG } from "@/config/site";
+import { getPackage } from "@/config/pricing";
 import { bookingServiceOptions } from "@/data/booking";
 import { industries } from "@/data/industries";
 import { DEMO_INDUSTRY_OTHER, type BookingLead, type DemoLead } from "@/lib/leadSchema";
@@ -21,6 +22,17 @@ function oneLine(value: string) {
   return value.replace(/[\r\n]+/g, " ").trim();
 }
 
+/** " — Complete System" for the email subject, or nothing when no package was chosen. */
+function packageSuffix(id: string | undefined) {
+  const name = getPackage(id)?.name;
+  return name ? ` — ${name}` : "";
+}
+
+function packageRows(id: string | undefined): [string, string][] {
+  const name = getPackage(id)?.name;
+  return name ? [["Package", name]] : [];
+}
+
 function replyToFor(contact: string) {
   return contact.includes("@") ? contact : null;
 }
@@ -29,7 +41,7 @@ export function bookingEmail(lead: BookingLead): Email {
   const service =
     bookingServiceOptions.find((option) => option.id === lead.service)?.label ?? lead.service;
   return {
-    subject: oneLine(`New lead: ${lead.name} (${lead.business})`),
+    subject: oneLine(`New lead: ${lead.name} (${lead.business})${packageSuffix(lead.package)}`),
     replyTo: replyToFor(lead.contact),
     rows: [
       ["Help with", service],
@@ -39,6 +51,7 @@ export function bookingEmail(lead: BookingLead): Email {
       ["Preferred days", lead.schedule.days.join(", ") || "No preference"],
       ["Preferred times (Irish time)", lead.schedule.times.join(", ") || "No preference"],
       ["Notes", lead.notes || "—"],
+      ...packageRows(lead.package),
     ],
   };
 }
@@ -49,7 +62,7 @@ export function demoEmail(lead: DemoLead): Email {
       ? "Other"
       : (industries.find((item) => item.slug === lead.industry)?.label ?? lead.industry);
   return {
-    subject: oneLine(`New DEMO request: ${lead.business}`),
+    subject: oneLine(`New DEMO request: ${lead.business}${packageSuffix(lead.package)}`),
     replyTo: replyToFor(lead.contact),
     rows: [
       ["Request", "Free personalised demo (promised within 48 hours)"],
@@ -57,6 +70,7 @@ export function demoEmail(lead: DemoLead): Email {
       ["Business", lead.business],
       ["Industry", industry],
       ["Contact", lead.contact],
+      ...packageRows(lead.package),
     ],
   };
 }

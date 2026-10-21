@@ -100,22 +100,6 @@ export function getPublicContact(): PublicContact {
 export const CRO_NUMBER = "";
 
 /* ------------------------------------------------------------------ */
-/* Pricing — leave null until a real price is agreed. Never invent one. */
-/* ------------------------------------------------------------------ */
-
-export const PRICING = {
-  AI_RECEPTIONIST_FROM_PRICE_EUR: null as number | null,
-  WEBSITE_FROM_PRICE_EUR: null as number | null,
-  /** Shown when the matching price above is null. */
-  fallbackLabel: "Clear fixed pricing — agreed before any work starts",
-};
-
-export function formatFromPrice(amountEur: number | null) {
-  if (amountEur === null) return PRICING.fallbackLabel;
-  return `From €${amountEur.toLocaleString("en-IE")}`;
-}
-
-/* ------------------------------------------------------------------ */
 /* Offers                                                              */
 /* ------------------------------------------------------------------ */
 

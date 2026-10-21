@@ -42,9 +42,11 @@ type BookingFlowProps = {
   initialService?: BookingServiceId;
   /** Business name from a personalised link (?b=), already sanitised. */
   initialBusiness?: string;
+  /** Pricing package id from the link (?package=), already validated. */
+  initialPackage?: string;
 };
 
-export default function BookingFlow({ initialService, initialBusiness }: BookingFlowProps) {
+export default function BookingFlow({ initialService, initialBusiness, initialPackage }: BookingFlowProps) {
   const [step, setStep] = useState(0);
   const [service, setService] = useState<BookingServiceId | null>(initialService ?? null);
   const [serviceError, setServiceError] = useState(false);
@@ -112,6 +114,7 @@ export default function BookingFlow({ initialService, initialBusiness }: Booking
     return {
       service: selected,
       schedule: { days, times, timeZone: DISPLAY_TIME_ZONE },
+      package: initialPackage,
       ...details,
     };
   }

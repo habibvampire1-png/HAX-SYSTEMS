@@ -14,6 +14,8 @@ export type BookingRequest = {
   business: string;
   contact: string;
   notes: string;
+  /** Pricing package id the visitor came from, if any. */
+  package?: string;
 };
 
 export type BookingResult = LeadResult;

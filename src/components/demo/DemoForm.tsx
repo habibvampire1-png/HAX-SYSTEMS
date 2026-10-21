@@ -13,6 +13,8 @@ type Props = {
   /** Prefill from the page the visitor came from; a slug or "other". */
   initialIndustry?: string;
   industryOptions: { value: string; label: string }[];
+  /** Package the visitor was looking at on the pricing page. */
+  selectedPackage?: { id: string; name: string };
 };
 
 type Values = { name: string; business: string; industry: string; contact: string };
@@ -37,7 +39,7 @@ function validate(values: Values): Errors {
   return errors;
 }
 
-export default function DemoForm({ initialBusiness, initialIndustry, industryOptions }: Props) {
+export default function DemoForm({ initialBusiness, initialIndustry, industryOptions, selectedPackage }: Props) {
   const [values, setValues] = useState<Values>({
     name: "",
     business: initialBusiness ?? "",
@@ -72,7 +74,12 @@ export default function DemoForm({ initialBusiness, initialIndustry, industryOpt
 
     setSubmitError(null);
     setStatus("submitting");
-    const result = await postLead({ type: "demo", ...values, companyWebsite: honeypot });
+    const result = await postLead({
+      type: "demo",
+      ...values,
+      package: selectedPackage?.id,
+      companyWebsite: honeypot,
+    });
     if (result.status === "sent") {
       setStatus("sent");
     } else {
@@ -109,6 +116,11 @@ export default function DemoForm({ initialBusiness, initialIndustry, industryOpt
     <form noValidate onSubmit={handleSubmit} className="p-5 sm:p-8">
       <h2 className="text-2xl font-semibold tracking-tight text-ink">Where should I send your demo?</h2>
       <p className="mt-2 text-slate-600">Four quick answers. No payment, no commitment.</p>
+      {selectedPackage && (
+        <p className="mt-3 inline-block rounded-full bg-hax-soft px-3 py-1 text-sm font-medium text-hax">
+          Interested in: {selectedPackage.name}
+        </p>
+      )}
 
       <div className="mt-6 grid gap-5 sm:grid-cols-2">
         <TextField
