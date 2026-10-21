@@ -3,6 +3,7 @@ import BookingFlow from "@/components/booking/BookingFlow";
 import Container from "@/components/layout/Container";
 import { Eyebrow } from "@/components/ui/SectionHeading";
 import { isBookingServiceId } from "@/data/booking";
+import { sanitizeBusinessName } from "@/lib/businessName";
 
 export const metadata: Metadata = {
   title: "Book a 15-minute call",
@@ -17,7 +18,8 @@ const nextSteps = [
 ];
 
 export default async function BookPage(props: PageProps<"/book">) {
-  const { service } = await props.searchParams;
+  const { service, b } = await props.searchParams;
+  const initialBusiness = sanitizeBusinessName(typeof b === "string" ? b : undefined) ?? undefined;
   const initialService = isBookingServiceId(service) ? service : undefined;
 
   return (
@@ -45,7 +47,7 @@ export default async function BookPage(props: PageProps<"/book">) {
         </div>
 
         <div className="rounded-3xl border border-slate-200 bg-white shadow-xl shadow-slate-900/[0.05]">
-          <BookingFlow initialService={initialService} />
+          <BookingFlow initialService={initialService} initialBusiness={initialBusiness} />
         </div>
       </Container>
     </main>

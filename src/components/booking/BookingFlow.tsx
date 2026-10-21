@@ -40,15 +40,22 @@ function toggle(list: string[], value: string) {
 
 type BookingFlowProps = {
   initialService?: BookingServiceId;
+  /** Business name from a personalised link (?b=), already sanitised. */
+  initialBusiness?: string;
 };
 
-export default function BookingFlow({ initialService }: BookingFlowProps) {
+export default function BookingFlow({ initialService, initialBusiness }: BookingFlowProps) {
   const [step, setStep] = useState(0);
   const [service, setService] = useState<BookingServiceId | null>(initialService ?? null);
   const [serviceError, setServiceError] = useState(false);
   const [days, setDays] = useState<string[]>([]);
   const [times, setTimes] = useState<string[]>([]);
-  const [details, setDetails] = useState<Details>({ name: "", business: "", contact: "", notes: "" });
+  const [details, setDetails] = useState<Details>({
+    name: "",
+    business: initialBusiness ?? "",
+    contact: "",
+    notes: "",
+  });
   const [errors, setErrors] = useState<DetailErrors>({});
   const [status, setStatus] = useState<"editing" | "submitting" | "sent">("editing");
   const [submitError, setSubmitError] = useState<string | null>(null);
