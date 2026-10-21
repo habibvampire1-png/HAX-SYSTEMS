@@ -1,4 +1,5 @@
 import Hero from "@/components/home/Hero";
+import MissedRevenueCalculator from "@/components/home/MissedRevenueCalculator";
 import ProblemSection from "@/components/home/ProblemSection";
 import SolutionsSection from "@/components/home/SolutionsSection";
 import CtaSection from "@/components/shared/CtaSection";
@@ -11,6 +12,7 @@ export default function HomePage() {
     <main>
       <Hero />
       <ProblemSection />
+      <MissedRevenueCalculator />
       <SolutionsSection />
       <CtaSection
         title="Stop losing customers to missed calls."
