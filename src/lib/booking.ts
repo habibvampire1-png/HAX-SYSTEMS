@@ -17,41 +17,30 @@ export type BookingRequest = {
 
 export type BookingResult =
   | { status: "sent" }
-  | { status: "not-configured" }
   | { status: "error"; message: string };
 
-/**
- * Sends a booking request.
- *
- * Server delivery is added in Phase 3. Until then it reports "not-configured"
- * and the UI hands the request over by email instead of faking success.
- */
+/** Sends a booking request to the server, which emails it to the founder. */
 export async function submitBookingRequest(
   request: BookingRequest,
+  honeypot = "",
 ): Promise<BookingResult> {
-  void request;
-  return { status: "not-configured" };
-}
+  try {
+    const response = await fetch("/api/lead", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ ...request, companyWebsite: honeypot }),
+    });
+    if (response.ok) return { status: "sent" };
 
-/** Builds an email link containing the visitor's answers, for when server delivery is unavailable. */
-export function buildBookingMailto(
-  email: string,
-  request: BookingRequest,
-  serviceLabel: string,
-): string {
-  const lines = [
-    `Help with: ${serviceLabel}`,
-    `Preferred days: ${request.schedule.days.join(", ") || "No preference"}`,
-    `Preferred times (Irish time): ${request.schedule.times.join(", ") || "No preference"}`,
-    `Name: ${request.name}`,
-    `Business: ${request.business}`,
-    `Contact: ${request.contact}`,
-    request.notes ? `Notes: ${request.notes}` : "",
-  ].filter(Boolean);
-  const params = new URLSearchParams({
-    subject: `Call request from ${request.name}`,
-    body: lines.join("\n"),
-  });
-  // URLSearchParams encodes spaces as "+", which mail clients show literally.
-  return `mailto:${email}?${params.toString().replace(/\+/g, "%20")}`;
+    const data = (await response.json().catch(() => null)) as { message?: string } | null;
+    return {
+      status: "error",
+      message: data?.message ?? "Something went wrong sending your request.",
+    };
+  } catch {
+    return {
+      status: "error",
+      message: "We couldn't reach the server. Check your connection and try again.",
+    };
+  }
 }

@@ -16,7 +16,7 @@ const colors = {
 };
 
 /* Sizes use em so the wordmark scales with the mark: HAX ≈ 0.62× mark height,
-   SYSTEMS ≈ 0.38× of HAX, gap ≈ 0.45× mark height. */
+   SYSTEMS ≈ 0.46× of HAX, gap ≈ 0.45× mark height. */
 const sizes = {
   header: { mark: "size-7 lg:size-8", text: "text-[17px] lg:text-[20px]", gap: "gap-3" },
   footer: { mark: "size-8", text: "text-[20px]", gap: "gap-3.5" },
@@ -60,7 +60,7 @@ export default function Logo({
       {showWordmark && (
         <span aria-hidden className={`flex flex-col font-manrope ${s.text}`}>
           <span className="leading-none font-extrabold tracking-[1px]">HAX</span>
-          <span className="mt-[0.18em] text-[0.38em] leading-none font-medium tracking-[0.5em]">
+          <span className="mt-[0.18em] text-[0.46em] leading-none font-medium tracking-[0.5em]">
             SYSTEMS
           </span>
         </span>

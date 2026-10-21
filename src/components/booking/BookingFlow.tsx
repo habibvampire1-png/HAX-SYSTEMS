@@ -4,10 +4,10 @@ import { useEffect, useRef, useState, type FormEvent } from "react";
 import ChoiceChip from "@/components/booking/ChoiceChip";
 import BookingProgress from "@/components/booking/BookingProgress";
 import ResponsePromise from "@/components/trust/ResponsePromise";
-import { SendIcon } from "@/components/ui/icons";
+import { CheckIcon } from "@/components/ui/icons";
 import { DISPLAY_TIME_ZONE, getPublicContact } from "@/config/site";
 import { bookingServiceOptions } from "@/data/booking";
-import { buildBookingMailto, submitBookingRequest, type BookingRequest } from "@/lib/booking";
+import { submitBookingRequest, type BookingRequest } from "@/lib/booking";
 import type { BookingServiceId } from "@/types";
 
 const STEPS = ["What you need", "Time", "Your details"];
@@ -50,7 +50,10 @@ export default function BookingFlow({ initialService }: BookingFlowProps) {
   const [times, setTimes] = useState<string[]>([]);
   const [details, setDetails] = useState<Details>({ name: "", business: "", contact: "", notes: "" });
   const [errors, setErrors] = useState<DetailErrors>({});
-  const [status, setStatus] = useState<"editing" | "submitting" | "handoff">("editing");
+  const [status, setStatus] = useState<"editing" | "submitting" | "sent">("editing");
+  const [submitError, setSubmitError] = useState<string | null>(null);
+  // Hidden spam trap: people never see it, bots fill it in.
+  const [honeypot, setHoneypot] = useState("");
 
   const headingRef = useRef<HTMLHeadingElement>(null);
   const hasNavigated = useRef(false);
@@ -86,11 +89,16 @@ export default function BookingFlow({ initialService }: BookingFlowProps) {
     }
     if (!service) return;
 
+    setSubmitError(null);
     setStatus("submitting");
-    const result = await submitBookingRequest(buildRequest(service));
-    hasNavigated.current = true;
-    // Until server delivery exists the visitor sends the request by email.
-    setStatus(result.status === "sent" ? "editing" : "handoff");
+    const result = await submitBookingRequest(buildRequest(service), honeypot);
+    if (result.status === "sent") {
+      hasNavigated.current = true;
+      setStatus("sent");
+    } else {
+      setSubmitError(result.message);
+      setStatus("editing");
+    }
   }
 
   function buildRequest(selected: BookingServiceId): BookingRequest {
@@ -104,58 +112,24 @@ export default function BookingFlow({ initialService }: BookingFlowProps) {
   const selectedService = bookingServiceOptions.find((option) => option.id === service);
   const { email, phone, whatsapp } = getPublicContact();
 
-  if (status === "handoff" && service) {
-    const mailto = email
-      ? buildBookingMailto(email, buildRequest(service), selectedService?.label ?? service)
-      : null;
-
+  if (status === "sent") {
     return (
       <div className="p-6 sm:p-8">
         <span className="flex size-12 items-center justify-center rounded-full bg-hax-soft text-hax">
-          <SendIcon className="size-6" />
+          <CheckIcon className="size-6" strokeWidth={2.5} />
         </span>
         <h2 ref={headingRef} tabIndex={-1} className="mt-5 text-2xl font-semibold tracking-tight text-ink outline-none">
-          One last step: send it to me.
+          Got it — I&rsquo;ll be in touch within 1 working day.
         </h2>
-        <p className="mt-3 text-slate-600">
-          Your request has not been sent yet. Press the button to open your
-          email with your answers already filled in, then hit send.
-        </p>
-        {mailto ? (
-          <a
-            href={mailto}
-            className="mt-5 inline-flex h-12 items-center justify-center rounded-full bg-hax px-6 text-base font-medium text-white shadow-sm shadow-hax/20 transition-colors hover:bg-hax-dark"
-          >
-            Open email to Habib
-          </a>
-        ) : (
-          <p role="alert" className="mt-5 text-sm text-red-700">
-            Sorry, sending isn&rsquo;t available right now. Please try again later.
-          </p>
-        )}
-        <ResponsePromise className="mt-3" />
-        {(phone || whatsapp) && (
-          <p className="mt-2 text-sm text-slate-600">
-            In a hurry?{" "}
-            {phone && (
-              <a href={phone.href} className="font-medium text-hax underline">
-                Call {phone.display}
-              </a>
-            )}
-            {phone && whatsapp && " or "}
-            {whatsapp && (
-              <a
-                href={whatsapp.href}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="font-medium text-hax underline"
-              >
-                message me on WhatsApp
-              </a>
-            )}
-            .
-          </p>
-        )}
+        <p className="mt-2 font-medium text-ink">— Habib</p>
+
+        <h3 className="mt-8 text-sm font-semibold text-ink">What happens next</h3>
+        <ol className="mt-3 space-y-2 text-slate-600">
+          <li>1. I read your answers.</li>
+          <li>2. I contact you to confirm a time for a 15-minute call.</li>
+          <li>3. We talk about what to fix first. No jargon.</li>
+        </ol>
+
         <dl className="mt-6 divide-y divide-slate-100 rounded-2xl border border-slate-200 text-sm">
           {[
             ["Help with", selectedService?.label],
@@ -171,16 +145,36 @@ export default function BookingFlow({ initialService }: BookingFlowProps) {
             </div>
           ))}
         </dl>
-        <button
-          type="button"
-          onClick={() => {
-            setStatus("editing");
-            goTo(2);
-          }}
-          className="mt-6 text-sm font-medium text-hax hover:text-hax-dark"
-        >
-          Edit details
-        </button>
+
+        {(phone || whatsapp || email) && (
+          <p className="mt-6 text-sm text-slate-600">
+            In a hurry?{" "}
+            {phone && (
+              <a href={phone.href} className="font-medium text-hax underline">
+                Call {phone.display}
+              </a>
+            )}
+            {phone && whatsapp && ", "}
+            {whatsapp && (
+              <a
+                href={whatsapp.href}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="font-medium text-hax underline"
+              >
+                message me on WhatsApp
+              </a>
+            )}
+            {(phone || whatsapp) && email && " or email "}
+            {!phone && !whatsapp && email && "Email "}
+            {email && (
+              <a href={`mailto:${email}`} className="font-medium text-hax underline">
+                {email}
+              </a>
+            )}
+            .
+          </p>
+        )}
       </div>
     );
   }
@@ -291,6 +285,20 @@ export default function BookingFlow({ initialService }: BookingFlowProps) {
             <p className="mt-2 text-slate-600">Just the essentials.</p>
             <ResponsePromise className="mt-1" />
 
+            {/* Honeypot: off-screen, skipped by keyboard and screen readers. */}
+            <div aria-hidden className="absolute -left-[9999px] h-0 w-0 overflow-hidden">
+              <label htmlFor="booking-company-website">Leave this field empty</label>
+              <input
+                id="booking-company-website"
+                name="companyWebsite"
+                type="text"
+                tabIndex={-1}
+                autoComplete="off"
+                value={honeypot}
+                onChange={(event) => setHoneypot(event.target.value)}
+              />
+            </div>
+
             <div className="mt-6 grid gap-5 sm:grid-cols-2">
               <TextField
                 id="booking-name"
@@ -333,6 +341,29 @@ export default function BookingFlow({ initialService }: BookingFlowProps) {
                 />
               </div>
             </div>
+
+            {submitError && (
+              <p role="alert" className="mt-5 rounded-xl border border-red-200 bg-red-50 p-3 text-sm text-red-800">
+                {submitError} Please try again
+                {phone || email ? (
+                  <>
+                    , or reach me directly on{" "}
+                    {phone && (
+                      <a href={phone.href} className="font-medium underline">
+                        {phone.display}
+                      </a>
+                    )}
+                    {phone && email && " or "}
+                    {email && (
+                      <a href={`mailto:${email}`} className="font-medium underline">
+                        {email}
+                      </a>
+                    )}
+                  </>
+                ) : null}
+                .
+              </p>
+            )}
 
             <StepActions
               onBack={() => goTo(1)}

@@ -1,36 +1,70 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# HAX Systems website
 
-## Getting Started
-
-First, run the development server:
+Next.js (App Router), TypeScript, Tailwind CSS v4. Deployed to Vercel from `main`.
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npm install
+npm run dev        # http://localhost:3000
+npm run lint
+npm run typecheck
+npm run build
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Configuration
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+All business facts, flags and claims live in `src/config/site.ts`. Nothing else should hard-code them.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+| Setting | Effect |
+| --- | --- |
+| `FLAGS.PHONE_ENABLED` | While false, no phone number or `tel:` link renders anywhere. |
+| `FLAGS.WHATSAPP_ENABLED` | While false, no WhatsApp link renders anywhere. |
+| `FLAGS.CONTACT_EMAIL_ENABLED` | Shows the contact email site-wide. |
+| `FLAGS.DEMO_OFFER_ENABLED` / `TRIAL_OFFER_ENABLED` | Lead-magnet offers. The trial is off until you can honour its guarantee. |
+| `CRO_NUMBER` | Shown in the footer only when non-empty. |
+| `PRICING.*` | Leave `null` to show "Clear fixed pricing — agreed before any work starts". |
+| `CLAIMS.*` | GDPR / EU hosting / integration claims render only when true. |
 
-## Learn More
+## Lead delivery (Resend)
 
-To learn more about Next.js, take a look at the following resources:
+The booking form posts to `POST /api/lead` (`src/app/api/lead/route.ts`). The route validates with Zod, drops honeypot hits, rate-limits per IP (5 per 10 minutes, best-effort in memory), and emails the lead through Resend. The browser never sees any secret.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+### Environment variables
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+Set these in Vercel (Project → Settings → Environment Variables) and in `.env.local` for local testing.
 
-## Deploy on Vercel
+| Variable | Required | Purpose |
+| --- | --- | --- |
+| `RESEND_API_KEY` | Yes | Resend API key. Without it the form shows an error and nothing is sent. |
+| `LEAD_TO_EMAIL` | No | Recipient. Defaults to `habib@haxsystems.com`. |
+| `LEAD_FROM_EMAIL` | No | Sender. Defaults to `HAX Systems <onboarding@resend.dev>` (Resend sandbox). |
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+**Sandbox limit:** until your domain is verified, Resend only delivers from `onboarding@resend.dev` to the email address of the Resend account itself. Sign up to Resend with `habib@haxsystems.com` (or set `LEAD_TO_EMAIL` to the address you signed up with) or sends will be rejected.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+### Send a test lead
+
+1. Add `RESEND_API_KEY` (and redeploy on Vercel, or restart `npm run dev`).
+2. Open `/book`, complete the three steps with a real contact and submit.
+3. You should see "Got it — I'll be in touch within 1 working day." and an email "New lead: …" arrives in the inbox.
+4. Check the failure path: remove the key; the form should show an error with your phone and email instead of success. Server logs show `[lead] RESEND_API_KEY is not set`.
+
+Command-line test against a running server:
+
+```bash
+curl -X POST http://localhost:3000/api/lead -H "content-type: application/json" -d '{"service":"ai-calling","schedule":{"days":["Monday"],"times":["Morning"],"timeZone":"Europe/Dublin"},"name":"Test","business":"Test Ltd","contact":"test@example.com","notes":"hello"}'
+```
+
+### Verify haxsystems.com in Resend (so mail comes from your own domain)
+
+1. Resend dashboard → **Domains → Add Domain** → `haxsystems.com` (region: Ireland/EU if offered).
+2. Resend shows the DNS records to add (a DKIM `TXT` at `resend._domainkey`, plus an SPF `TXT` and `MX` on a `send` subdomain). Copy them exactly as shown there.
+3. Hostinger hPanel → **Domains → haxsystems.com → DNS / Nameservers → DNS Zone Editor**, add each record with the type, name and value Resend gives you. Delete nothing else. Remove any existing record only if Resend says it conflicts.
+4. Back in Resend press **Verify DNS Records** (can take from minutes to a few hours).
+5. In Vercel set `LEAD_FROM_EMAIL` to e.g. `HAX Systems <leads@haxsystems.com>` and redeploy.
+
+## Brand assets
+
+`public/brand/*` holds the logo SVGs. `node scripts/generate-icons.mjs` regenerates the PNG favicons from `public/brand/hax-icon.svg`. The Open Graph image is generated by `src/app/opengraph-image.tsx`.
+
+## Adding real case studies
+
+Edit `src/data/caseStudies.ts`: add an entry with `kind: "client"` and an `image`. Concept projects stay labelled "Concept project".

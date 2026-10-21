@@ -155,3 +155,6 @@ export const CLAIMS = {
     booksy: false,
   },
 };
+
+/** Where lead emails are delivered. Override per environment with LEAD_TO_EMAIL. */
+export const LEAD_RECIPIENT_EMAIL = CONTACT_DETAILS.email;
