@@ -33,11 +33,13 @@ export async function submitBookingRequest(
     if (response.ok) return { status: "sent" };
 
     const data = (await response.json().catch(() => null)) as { message?: string } | null;
+    console.error("Lead submission failed:", response.status, data);
     return {
       status: "error",
       message: data?.message ?? "Something went wrong sending your request.",
     };
-  } catch {
+  } catch (error) {
+    console.error("Lead submission could not reach the server:", error);
     return {
       status: "error",
       message: "We couldn't reach the server. Check your connection and try again.",

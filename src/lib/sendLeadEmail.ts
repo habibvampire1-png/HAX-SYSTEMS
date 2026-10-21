@@ -29,6 +29,7 @@ export async function sendBookingLeadEmail(lead: BookingLead): Promise<SendResul
   const to = process.env.LEAD_TO_EMAIL || LEAD_RECIPIENT_EMAIL;
   // Until haxsystems.com is verified in Resend, only Resend's sandbox sender works.
   const from = process.env.LEAD_FROM_EMAIL || `${SITE_CONFIG.name} <onboarding@resend.dev>`;
+  console.log("[lead] sending via Resend", { from, to });
   const service = bookingServiceOptions.find((option) => option.id === lead.service)?.label ?? lead.service;
 
   const rows: [string, string][] = [
@@ -72,6 +73,8 @@ export async function sendBookingLeadEmail(lead: BookingLead): Promise<SendResul
       console.error("[lead] Resend rejected the email:", response.status, await response.text());
       return { ok: false, reason: "failed" };
     }
+    const sent = (await response.json().catch(() => null)) as { id?: string } | null;
+    console.log("[lead] Resend accepted the email", { id: sent?.id });
     return { ok: true };
   } catch (error) {
     console.error("[lead] Could not reach Resend:", error);
