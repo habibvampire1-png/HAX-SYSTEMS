@@ -1,10 +1,10 @@
 import PersonalisedLink from "@/components/industry/PersonalisedLink";
 import { CheckIcon } from "@/components/ui/icons";
 import { FLAGS, OFFERS, PRICING, formatFromPrice } from "@/config/site";
-import { demoCta } from "@/data/navigation";
+import { demoCta, getDemoHref } from "@/data/navigation";
 
 /** The offer: free demo, optional 14-day trial, and the pricing line. All wording comes from the site config. */
-export default function OfferBlock() {
+export default function OfferBlock({ industry }: { industry?: string }) {
   const points = [
     ...(FLAGS.DEMO_OFFER_ENABLED ? [OFFERS.demo.promise] : []),
     ...(FLAGS.TRIAL_OFFER_ENABLED ? [`${OFFERS.trial.title}. ${OFFERS.trial.guarantee}`] : []),
@@ -24,7 +24,7 @@ export default function OfferBlock() {
         ))}
       </ul>
       {FLAGS.DEMO_OFFER_ENABLED && (
-        <PersonalisedLink href={demoCta.href} size="lg" variant="inverse" className="mt-8 w-full sm:w-auto">
+        <PersonalisedLink href={getDemoHref(industry)} size="lg" variant="inverse" className="mt-8 w-full sm:w-auto">
           {demoCta.label}
         </PersonalisedLink>
       )}

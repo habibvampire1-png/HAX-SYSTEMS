@@ -1,6 +1,7 @@
-import { bookingLeadSchema } from "@/lib/leadSchema";
+import { bookingLeadSchema, demoLeadSchema } from "@/lib/leadSchema";
+import type { BookingLead } from "@/lib/leadSchema";
 import { isRateLimited } from "@/lib/rateLimit";
-import { sendBookingLeadEmail } from "@/lib/sendLeadEmail";
+import { bookingEmail, demoEmail, sendLeadEmail } from "@/lib/sendLeadEmail";
 
 const MAX_BODY_BYTES = 10_000;
 
@@ -43,7 +44,8 @@ export async function POST(request: Request) {
     return json({ ok: false, error: "invalid" }, 400);
   }
 
-  const parsed = bookingLeadSchema.safeParse(payload);
+  const isDemo = typeof payload === "object" && payload !== null && (payload as { type?: unknown }).type === "demo";
+  const parsed = isDemo ? demoLeadSchema.safeParse(payload) : bookingLeadSchema.safeParse(payload);
   if (!parsed.success) {
     const fields: Record<string, string> = {};
     for (const issue of parsed.error.issues) {
@@ -59,8 +61,11 @@ export async function POST(request: Request) {
     return json({ ok: true }, 200);
   }
 
-  console.log("[lead] valid lead, sending", { service: parsed.data.service });
-  const result = await sendBookingLeadEmail(parsed.data);
+  const data = parsed.data;
+  console.log("[lead] valid lead, sending", { type: isDemo ? "demo" : "booking" });
+  const result = await sendLeadEmail(
+    "type" in data && data.type === "demo" ? demoEmail(data) : bookingEmail(data as BookingLead),
+  );
   if (!result.ok) {
     console.error("[lead] delivery failed", { reason: result.reason });
     return json(

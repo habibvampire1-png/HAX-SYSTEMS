@@ -6,10 +6,10 @@ export const primaryCta: NavLink = {
   href: "/book",
 };
 
-/** Lead-magnet entry point. Points at the booking flow until the demo form ships. */
+/** Free personalised demo form. Pass an industry slug to prefill it. */
 export const demoCta: NavLink = {
   label: "Hear a free demo for your business",
-  href: "/book?service=ai-calling",
+  href: "/demo",
 };
 
 export const solutionsMenu: NavDropdownMenu = {
@@ -51,3 +51,7 @@ export const legalNavigation: NavLink[] = [
   { label: "Privacy", href: "/privacy" },
   { label: "Terms", href: "/terms" },
 ];
+
+export function getDemoHref(industry?: string) {
+  return industry ? `${demoCta.href}?industry=${encodeURIComponent(industry)}` : demoCta.href;
+}

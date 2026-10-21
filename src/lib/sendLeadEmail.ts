@@ -1,9 +1,12 @@
 import "server-only";
 import { LEAD_RECIPIENT_EMAIL, SITE_CONFIG } from "@/config/site";
 import { bookingServiceOptions } from "@/data/booking";
-import type { BookingLead } from "@/lib/leadSchema";
+import { industries } from "@/data/industries";
+import { DEMO_INDUSTRY_OTHER, type BookingLead, type DemoLead } from "@/lib/leadSchema";
 
 export type SendResult = { ok: true } | { ok: false; reason: "not-configured" | "failed" };
+
+type Email = { subject: string; rows: [string, string][]; replyTo: string | null };
 
 function escapeHtml(value: string) {
   return value
@@ -18,8 +21,48 @@ function oneLine(value: string) {
   return value.replace(/[\r\n]+/g, " ").trim();
 }
 
-/** Emails a booking lead to the founder through Resend's REST API. */
-export async function sendBookingLeadEmail(lead: BookingLead): Promise<SendResult> {
+function replyToFor(contact: string) {
+  return contact.includes("@") ? contact : null;
+}
+
+export function bookingEmail(lead: BookingLead): Email {
+  const service =
+    bookingServiceOptions.find((option) => option.id === lead.service)?.label ?? lead.service;
+  return {
+    subject: oneLine(`New lead: ${lead.name} (${lead.business})`),
+    replyTo: replyToFor(lead.contact),
+    rows: [
+      ["Help with", service],
+      ["Name", lead.name],
+      ["Business", lead.business],
+      ["Contact", lead.contact],
+      ["Preferred days", lead.schedule.days.join(", ") || "No preference"],
+      ["Preferred times (Irish time)", lead.schedule.times.join(", ") || "No preference"],
+      ["Notes", lead.notes || "—"],
+    ],
+  };
+}
+
+export function demoEmail(lead: DemoLead): Email {
+  const industry =
+    lead.industry === DEMO_INDUSTRY_OTHER
+      ? "Other"
+      : (industries.find((item) => item.slug === lead.industry)?.label ?? lead.industry);
+  return {
+    subject: oneLine(`New DEMO request: ${lead.business}`),
+    replyTo: replyToFor(lead.contact),
+    rows: [
+      ["Request", "Free personalised demo (promised within 48 hours)"],
+      ["Name", lead.name],
+      ["Business", lead.business],
+      ["Industry", industry],
+      ["Contact", lead.contact],
+    ],
+  };
+}
+
+/** Emails a lead to the founder through Resend's REST API. */
+export async function sendLeadEmail({ subject, rows, replyTo }: Email): Promise<SendResult> {
   const apiKey = process.env.RESEND_API_KEY;
   if (!apiKey) {
     console.error("[lead] RESEND_API_KEY is not set; lead was NOT delivered.");
@@ -29,18 +72,7 @@ export async function sendBookingLeadEmail(lead: BookingLead): Promise<SendResul
   const to = process.env.LEAD_TO_EMAIL || LEAD_RECIPIENT_EMAIL;
   // Until haxsystems.com is verified in Resend, only Resend's sandbox sender works.
   const from = process.env.LEAD_FROM_EMAIL || `${SITE_CONFIG.name} <onboarding@resend.dev>`;
-  console.log("[lead] sending via Resend", { from, to });
-  const service = bookingServiceOptions.find((option) => option.id === lead.service)?.label ?? lead.service;
-
-  const rows: [string, string][] = [
-    ["Help with", service],
-    ["Name", lead.name],
-    ["Business", lead.business],
-    ["Contact", lead.contact],
-    ["Preferred days", lead.schedule.days.join(", ") || "No preference"],
-    ["Preferred times (Irish time)", lead.schedule.times.join(", ") || "No preference"],
-    ["Notes", lead.notes || "—"],
-  ];
+  console.log("[lead] sending via Resend", { from, to, subject });
 
   const text = rows.map(([label, value]) => `${label}: ${value}`).join("\n");
   const html = `<table cellpadding="6" style="font-family:sans-serif;font-size:15px">${rows
@@ -61,8 +93,8 @@ export async function sendBookingLeadEmail(lead: BookingLead): Promise<SendResul
         from,
         to: [to],
         // Replying to the email goes straight to the lead when they gave an email address.
-        ...(lead.contact.includes("@") && { reply_to: lead.contact }),
-        subject: oneLine(`New lead: ${lead.name} (${lead.business})`),
+        ...(replyTo && { reply_to: replyTo }),
+        subject,
         text,
         html,
       }),

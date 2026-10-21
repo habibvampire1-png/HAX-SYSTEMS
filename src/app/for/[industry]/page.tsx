@@ -12,7 +12,7 @@ import SectionHeading from "@/components/ui/SectionHeading";
 import { CheckIcon } from "@/components/ui/icons";
 import { SITE_CONFIG } from "@/config/site";
 import { getIndustry, industries } from "@/data/industries";
-import { demoCta, primaryCta } from "@/data/navigation";
+import { demoCta, getDemoHref, primaryCta } from "@/data/navigation";
 
 /* Statically rendered for every industry. The ?b=BusinessName personalisation
    is read in the browser, and the proxy adds noindex when it is present. */
@@ -59,7 +59,7 @@ export default async function IndustryPage(props: PageProps<"/for/[industry]">) 
             {industry.subhead}
           </p>
           <div className="mx-auto mt-8 flex max-w-md flex-col justify-center gap-3 sm:max-w-none sm:flex-row">
-            <PersonalisedLink href={demoCta.href} size="lg" className="px-7">
+            <PersonalisedLink href={getDemoHref(industry.slug)} size="lg" className="px-7">
               {demoCta.label}
             </PersonalisedLink>
             <PersonalisedLink href={primaryCta.href} size="lg" variant="secondary" className="px-7">
@@ -120,7 +120,7 @@ export default async function IndustryPage(props: PageProps<"/for/[industry]">) 
             title="See it work for your business first."
             className="mb-10"
           />
-          <OfferBlock />
+          <OfferBlock industry={industry.slug} />
         </Container>
       </section>
 
@@ -140,7 +140,7 @@ export default async function IndustryPage(props: PageProps<"/for/[industry]">) 
             Stop losing customers to missed calls.
           </h2>
           <div className="mx-auto mt-8 flex max-w-md flex-col justify-center gap-3 sm:max-w-none sm:flex-row">
-            <PersonalisedLink href={demoCta.href} size="lg" className="px-7">
+            <PersonalisedLink href={getDemoHref(industry.slug)} size="lg" className="px-7">
               {demoCta.label}
             </PersonalisedLink>
             <PersonalisedLink href={primaryCta.href} size="lg" variant="secondary" className="px-7">
