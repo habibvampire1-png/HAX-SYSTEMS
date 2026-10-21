@@ -4,7 +4,7 @@ import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
 import MobileContactBar from "@/components/layout/MobileContactBar";
 import LocalBusinessJsonLd from "@/components/seo/LocalBusinessJsonLd";
-import { SITE_CONFIG } from "@/config/site";
+import { SITE_CONFIG, getPublicContact } from "@/config/site";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -48,6 +48,8 @@ export const metadata: Metadata = {
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
+  const { phone, whatsapp } = getPublicContact();
+
   return (
     // suppressHydrationWarning: browser extensions add attributes to <html>
     // (e.g. data-js-focus-visible); this only affects this one element.
@@ -62,7 +64,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         <Header />
         <div className="flex-1">{children}</div>
         <Footer />
-        <MobileContactBar />
+        <MobileContactBar phone={phone} whatsapp={whatsapp} />
       </body>
     </html>
   );
