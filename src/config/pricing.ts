@@ -98,7 +98,7 @@ export const pricingTrustLine = [
 
 /**
  * Set to true once HAX Systems is VAT registered. The pricing page then says
- * "Prices exclude VAT." Until then it only says prices are in euro.
+ * "Prices exclude VAT." Until then it only says prices are in EUR.
  */
 export const VAT_REGISTERED: boolean = false;
 
@@ -108,7 +108,7 @@ export const FOUNDING_OFFER = {
   message: "Founding clients: 50% off setup for our first 3 clients.",
 };
 
-const euro = new Intl.NumberFormat("en-IE", {
+const euro = new Intl.NumberFormat("en", {
   style: "currency",
   currency: "EUR",
   maximumFractionDigits: 0,

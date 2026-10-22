@@ -1,7 +1,7 @@
 import { existsSync } from "node:fs";
 import { join } from "node:path";
 import Image from "next/image";
-import { LOCATION_LABEL, SITE_CONFIG } from "@/config/site";
+import { SITE_CONFIG } from "@/config/site";
 
 function getInitials(name: string) {
   return name
@@ -38,7 +38,6 @@ export default function FounderCard() {
       <div>
         <p className="font-semibold text-ink">{SITE_CONFIG.founder}</p>
         <p className="text-sm text-slate-600">Founder, {SITE_CONFIG.name}</p>
-        <p className="text-sm text-slate-600">{LOCATION_LABEL}</p>
       </div>
     </div>
   );

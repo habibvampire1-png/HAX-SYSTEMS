@@ -16,7 +16,7 @@ export const metadata: Metadata = {
 
 const nextSteps = [
   "I read your answers before the call.",
-  "I confirm a time that suits you, in Irish time.",
+  "I confirm a time that suits you, in your time zone.",
   "We talk for 15 minutes about what to fix first. No jargon.",
 ];
 

@@ -13,7 +13,7 @@ import { SITE_CONFIG } from "@/config/site";
 export const metadata: Metadata = {
   title: "Pricing",
   description:
-    "Simple, fixed pricing for AI receptionists, missed-call text-back, websites and custom systems for Irish businesses. Prices in euro, agreed before work starts.",
+    "Simple, fixed pricing for AI receptionists, missed-call text-back, websites and custom systems for local businesses. Prices in EUR, agreed before work starts.",
   alternates: { canonical: `${SITE_CONFIG.url}/pricing` },
 };
 
@@ -27,7 +27,7 @@ export default function PricingPage() {
           Simple pricing. Fixed before we start.
         </h1>
         <p className="mx-auto mt-5 max-w-2xl text-lg leading-relaxed text-slate-600 sm:text-xl">
-          One setup fee, then a monthly plan. {VAT_REGISTERED ? "Prices exclude VAT." : "All prices are in euro."}
+          One setup fee, then a monthly plan. {VAT_REGISTERED ? "Prices exclude VAT." : "All prices in EUR (€)."}
         </p>
         <FoundingBanner />
       </Container>

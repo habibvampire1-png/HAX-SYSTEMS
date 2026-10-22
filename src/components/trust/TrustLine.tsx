@@ -1,6 +1,4 @@
-import { LOCATION } from "@/config/site";
-
-const items = [`Based in ${LOCATION.county}`, "Talk directly to the founder", "No contracts"];
+const items = ["Talk directly to the founder", "Meet online or in person", "No contracts"];
 
 /** One-line trust signals shown under the hero buttons. Wraps between items, never inside one. */
 export default function TrustLine({ className = "" }: { className?: string }) {

@@ -27,7 +27,7 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_CONFIG.url),
   title: {
-    default: `${SITE_CONFIG.name} | AI Receptionists & Booking Systems for Irish Businesses`,
+    default: `${SITE_CONFIG.name} | AI Receptionists & Booking Systems for Local Businesses`,
     template: `%s | ${SITE_CONFIG.name}`,
   },
   description: SITE_CONFIG.description,
@@ -41,7 +41,7 @@ export const metadata: Metadata = {
   openGraph: {
     type: "website",
     siteName: SITE_CONFIG.name,
-    title: `${SITE_CONFIG.name} | AI Receptionists & Booking Systems for Irish Businesses`,
+    title: `${SITE_CONFIG.name} | AI Receptionists & Booking Systems for Local Businesses`,
     description: SITE_CONFIG.description,
     url: "/",
   },

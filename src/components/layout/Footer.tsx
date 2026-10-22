@@ -1,7 +1,7 @@
 import Link from "next/link";
 import Container from "@/components/layout/Container";
 import Logo from "@/components/layout/Logo";
-import { CRO_NUMBER, LOCATION_LABEL, SITE_CONFIG, getPublicContact } from "@/config/site";
+import { CRO_NUMBER, SITE_CONFIG, getPublicContact } from "@/config/site";
 import { footerNavigation, legalNavigation } from "@/data/navigation";
 
 export default function Footer() {
@@ -14,7 +14,7 @@ export default function Footer() {
           <div>
             <Logo size="footer" />
             <p className="mt-4 max-w-xs text-base text-slate-600">
-              AI receptionists, booking and follow-up systems for Irish businesses.
+              AI receptionists, booking and follow-up systems for local service businesses.
             </p>
           </div>
 
@@ -74,7 +74,6 @@ export default function Footer() {
                     </a>
                   </li>
                 )}
-                <li>{LOCATION_LABEL}</li>
               </ul>
             </div>
           </div>

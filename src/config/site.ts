@@ -13,18 +13,8 @@ export const SITE_CONFIG = {
   url: "https://www.haxsystems.com",
   founder: "Habib Ali",
   description:
-    "HAX Systems sets up AI receptionists, booking and follow-up systems for Irish businesses, so every call and enquiry gets answered, even when you're busy.",
+    "HAX Systems sets up AI receptionists, booking and follow-up systems for local service businesses, so every call and enquiry gets answered, even when you're busy.",
 } as const;
-
-export const LOCATION = {
-  locality: "Dunshaughlin",
-  county: "Co. Meath",
-  country: "Ireland",
-  /** Where the business is happy to work. */
-  serves: ["Meath", "Dublin", "Nationwide Ireland"],
-} as const;
-
-export const LOCATION_LABEL = `${LOCATION.locality}, ${LOCATION.county}, ${LOCATION.country}`;
 
 /* ------------------------------------------------------------------ */
 /* Feature flags                                                       */
@@ -50,8 +40,6 @@ export const FLAGS = {
 const CONTACT_DETAILS = {
   email: "habib@haxsystems.com",
   phone: "+353 89 408 7717",
-  /** Irish-style display format of the phone number. */
-  phoneDisplay: "089 408 7717",
   /** WhatsApp uses the same number. */
   whatsapp: "+353 89 408 7717",
   whatsappMessage: "Hi HAX Systems, I'd like to know more about your services.",
@@ -79,7 +67,7 @@ export function getPublicContact(): PublicContact {
     email: FLAGS.CONTACT_EMAIL_ENABLED ? CONTACT_DETAILS.email : null,
     phone: FLAGS.PHONE_ENABLED
       ? {
-          display: CONTACT_DETAILS.phoneDisplay,
+          display: CONTACT_DETAILS.phone,
           href: `tel:+${digitsOnly(CONTACT_DETAILS.phone)}`,
           e164: `+${digitsOnly(CONTACT_DETAILS.phone)}`,
         }
@@ -122,9 +110,6 @@ export const OFFERS = {
 
 /** e.g. a Cal.com link. */
 export const CALENDAR_URL: string = "";
-
-/** Times are always shown in Irish time, not the visitor's. */
-export const DISPLAY_TIME_ZONE = "Europe/Dublin";
 
 /* ------------------------------------------------------------------ */
 /* Claims — render a claim only when its flag is true                  */

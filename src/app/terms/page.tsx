@@ -29,7 +29,11 @@ const sections = [
   },
   {
     title: "Liability",
-    body: "I take care with every build, but I can't promise specific business results. Nothing here limits any rights you have under Irish law.",
+    body: "I take care with every build, but I can't promise specific business results.",
+  },
+  {
+    title: "Governing law",
+    body: "These terms are governed by the laws of Ireland. Nothing here limits any rights you have under the consumer laws of your own country.",
   },
 ];
 

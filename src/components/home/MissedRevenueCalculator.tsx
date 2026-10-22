@@ -10,7 +10,7 @@ const WEEKS_PER_YEAR = 52;
 const MAX_ENQUIRIES = 10_000;
 const MAX_VALUE = 1_000_000;
 
-const euro = new Intl.NumberFormat("en-IE", {
+const euro = new Intl.NumberFormat("en", {
   style: "currency",
   currency: "EUR",
   maximumFractionDigits: 0,

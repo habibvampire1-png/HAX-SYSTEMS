@@ -38,7 +38,7 @@ export const industries: Industry[] = [
     subhead:
       "An AI receptionist answers every call, takes the booking details and follows up, so you can stay focused on the client in your chair.",
     metaDescription:
-      "An AI receptionist for salons and beauty businesses in Ireland. Answer every call, capture booking requests and follow up, even when you're mid-treatment.",
+      "An AI receptionist for salons and beauty businesses. Answer every call, capture booking requests and follow up, even when you're mid-treatment.",
     pains: [
       {
         title: "The phone rings mid-treatment",
@@ -102,7 +102,7 @@ export const industries: Industry[] = [
     subhead:
       "An AI receptionist answers calls, captures what the person is interested in and books the consultation, so serious enquiries don't go cold.",
     metaDescription:
-      "An AI receptionist for aesthetic clinics in Ireland. Answer every enquiry, capture treatment interest and book consultations, even during appointments.",
+      "An AI receptionist for aesthetic clinics. Answer every enquiry, capture treatment interest and book consultations, even during appointments.",
     pains: [
       {
         title: "Calls arrive during treatments",
@@ -166,7 +166,7 @@ export const industries: Industry[] = [
     subhead:
       "An AI receptionist answers every call, takes the details of the job and books the car in, so you stop losing work to missed calls.",
     metaDescription:
-      "An AI receptionist for garages and automotive businesses in Ireland. Answer every call, capture service enquiries and book jobs while you work.",
+      "An AI receptionist for garages and automotive businesses. Answer every call, capture service enquiries and book jobs while you work.",
     pains: [
       {
         title: "You can't answer while under a car",
@@ -229,7 +229,7 @@ export const industries: Industry[] = [
     subhead:
       "An AI receptionist answers calls, collects the details for a quote and books the visit, so you win more work without stopping the job you're on.",
     metaDescription:
-      "An AI receptionist for cleaning businesses in Ireland. Answer every quote request, capture job details and book visits while your team is out working.",
+      "An AI receptionist for cleaning businesses. Answer every quote request, capture job details and book visits while your team is out working.",
     pains: [
       {
         title: "Quote requests come in mid-job",
@@ -252,7 +252,7 @@ export const industries: Industry[] = [
         speaker: "AI receptionist",
         text: "Happy to help. How many bedrooms is it, and what area are you in?",
       },
-      { speaker: "Caller", text: "Four bedrooms, in Navan." },
+      { speaker: "Caller", text: "Four bedrooms, near the town centre." },
       {
         speaker: "AI receptionist",
         text: "Thanks. When would you like it done, and what's the best number to reach you?",
@@ -293,7 +293,7 @@ export const industries: Industry[] = [
     subhead:
       "An AI receptionist answers every call while you work, takes the job details and lets you call back the ones worth winning.",
     metaDescription:
-      "An AI receptionist for plumbers, electricians and other trades in Ireland. Answer every call on site, capture job details and stop losing work to voicemail.",
+      "An AI receptionist for plumbers, electricians and other trades. Answer every call on site, capture job details and stop losing work to voicemail.",
     pains: [
       {
         title: "Calls come when your hands are full",
@@ -316,7 +316,7 @@ export const industries: Industry[] = [
         speaker: "AI receptionist",
         text: "I'm sorry to hear that. Can I take your address and a good number to reach you?",
       },
-      { speaker: "Caller", text: "Sure, it's in Dunshaughlin." },
+      { speaker: "Caller", text: "Sure, it's on Main Street." },
       {
         speaker: "AI receptionist",
         text: "Thanks. I've marked it as urgent, and you'll get a call back.",

@@ -14,7 +14,7 @@ export const metadata: Metadata = {
 const sections = [
   {
     title: "Who I am",
-    body: `${SITE_CONFIG.name} is run by ${SITE_CONFIG.founder} in Ireland. I'm responsible for the personal information described on this page.`,
+    body: `${SITE_CONFIG.name} is a company registered in Ireland, run by ${SITE_CONFIG.founder}. I'm responsible for the personal information described on this page.`,
   },
   {
     title: "What I collect",

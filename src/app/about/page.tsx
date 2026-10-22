@@ -3,12 +3,12 @@ import Container from "@/components/layout/Container";
 import CtaSection from "@/components/shared/CtaSection";
 import FounderCard from "@/components/shared/FounderCard";
 import PageIntro from "@/components/shared/PageIntro";
-import { LOCATION_LABEL, SITE_CONFIG, getPublicContact } from "@/config/site";
+import { SITE_CONFIG, getPublicContact } from "@/config/site";
 
 export const metadata: Metadata = {
   title: "About Habib Ali and HAX Systems",
   description:
-    "HAX Systems is run by Habib Ali from Dunshaughlin, Co. Meath. You deal with the founder directly, from first call to go-live.",
+    "HAX Systems is run by Habib Ali. You deal with the founder directly, from first call to go-live.",
 };
 
 const principles = [
@@ -50,7 +50,7 @@ export default function AboutPage() {
               from what is known about the business, with no invented history. */}
           <div className="mt-6 space-y-4 text-lg leading-relaxed text-slate-700">
             <p>
-              I&rsquo;m {SITE_CONFIG.founder}, and I run {SITE_CONFIG.name} from {LOCATION_LABEL}.
+              I&rsquo;m {SITE_CONFIG.founder}, and I run {SITE_CONFIG.name}. We build AI receptionists and booking systems for service businesses.
             </p>
             <p>
               Most small businesses don&rsquo;t lose customers because the work is poor. They lose
@@ -93,7 +93,6 @@ export default function AboutPage() {
                 </a>
               </li>
             )}
-            <li>{LOCATION_LABEL}</li>
           </ul>
         </div>
       </Container>

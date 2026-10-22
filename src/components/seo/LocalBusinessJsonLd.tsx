@@ -1,4 +1,4 @@
-import { LOCATION, SITE_CONFIG, getPublicContact } from "@/config/site";
+import { SITE_CONFIG, getPublicContact } from "@/config/site";
 
 /** Structured data for search engines. Email and telephone appear only while their flags are on. */
 export default function LocalBusinessJsonLd() {
@@ -16,17 +16,7 @@ export default function LocalBusinessJsonLd() {
     ...(email && { email }),
     ...(phone && { telephone: phone.e164 }),
     founder: { "@type": "Person", name: SITE_CONFIG.founder },
-    address: {
-      "@type": "PostalAddress",
-      addressLocality: LOCATION.locality,
-      addressRegion: "County Meath",
-      addressCountry: "IE",
-    },
-    areaServed: [
-      { "@type": "AdministrativeArea", name: "County Meath" },
-      { "@type": "AdministrativeArea", name: "Dublin" },
-      { "@type": "Country", name: "Ireland" },
-    ],
+    areaServed: "Worldwide",
   };
 
   return (

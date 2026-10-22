@@ -61,9 +61,9 @@ export default function Hero() {
 
         <div className="relative z-[1] mx-auto mt-5 max-w-[46ch] sm:mt-7">
           <p className="mb-6 text-base leading-[1.55] text-slate-600 sm:mb-8 sm:text-[1.0625rem] sm:leading-[1.6]">
-            We set up AI receptionists, booking and follow-up systems for Irish
-            businesses — so every call and enquiry gets answered, even when
-            you&rsquo;re busy.
+            We set up AI receptionists, booking and follow-up systems for local
+            service businesses — so every call and enquiry gets answered, even
+            when you&rsquo;re busy.
           </p>
 
           <div className="flex flex-col items-stretch justify-center gap-3 sm:flex-row sm:items-center">

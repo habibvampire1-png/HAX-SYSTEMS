@@ -10,7 +10,7 @@ export default function PackagesJsonLd() {
       name: item.name,
       description: item.features.join(". "),
       provider: { "@id": `${SITE_CONFIG.url}/#business` },
-      areaServed: "IE",
+      areaServed: "Worldwide",
       offers: {
         "@type": "Offer",
         url: `${SITE_CONFIG.url}/pricing`,

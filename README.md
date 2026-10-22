@@ -50,12 +50,12 @@ Set these in Vercel (Project → Settings → Environment Variables) and in `.en
 Command-line test against a running server:
 
 ```bash
-curl -X POST http://localhost:3000/api/lead -H "content-type: application/json" -d '{"service":"ai-calling","schedule":{"days":["Monday"],"times":["Morning"],"timeZone":"Europe/Dublin"},"name":"Test","business":"Test Ltd","contact":"test@example.com","notes":"hello"}'
+curl -X POST http://localhost:3000/api/lead -H "content-type: application/json" -d '{"service":"ai-calling","schedule":{"days":["Monday"],"times":["Morning"],"timeZone":"UTC"},"name":"Test","business":"Test Ltd","contact":"test@example.com","notes":"hello"}'
 ```
 
 ### Verify haxsystems.com in Resend (so mail comes from your own domain)
 
-1. Resend dashboard → **Domains → Add Domain** → `haxsystems.com` (region: Ireland/EU if offered).
+1. Resend dashboard → **Domains → Add Domain** → `haxsystems.com` (choose the region closest to your customers).
 2. Resend shows the DNS records to add (a DKIM `TXT` at `resend._domainkey`, plus an SPF `TXT` and `MX` on a `send` subdomain). Copy them exactly as shown there.
 3. Hostinger hPanel → **Domains → haxsystems.com → DNS / Nameservers → DNS Zone Editor**, add each record with the type, name and value Resend gives you. Delete nothing else. Remove any existing record only if Resend says it conflicts.
 4. Back in Resend press **Verify DNS Records** (can take from minutes to a few hours).

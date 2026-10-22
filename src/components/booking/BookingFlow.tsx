@@ -5,7 +5,7 @@ import ChoiceChip from "@/components/booking/ChoiceChip";
 import BookingProgress from "@/components/booking/BookingProgress";
 import ResponsePromise from "@/components/trust/ResponsePromise";
 import { CheckIcon } from "@/components/ui/icons";
-import { DISPLAY_TIME_ZONE, getPublicContact } from "@/config/site";
+import { getPublicContact } from "@/config/site";
 import { bookingServiceOptions } from "@/data/booking";
 import { submitBookingRequest, type BookingRequest } from "@/lib/booking";
 import type { BookingServiceId } from "@/types";
@@ -52,6 +52,8 @@ export default function BookingFlow({ initialService, initialBusiness, initialPa
   const [serviceError, setServiceError] = useState(false);
   const [days, setDays] = useState<string[]>([]);
   const [times, setTimes] = useState<string[]>([]);
+  // Optional. When left empty the browser's own time zone is sent instead.
+  const [timeZone, setTimeZone] = useState("");
   const [details, setDetails] = useState<Details>({
     name: "",
     business: initialBusiness ?? "",
@@ -113,7 +115,11 @@ export default function BookingFlow({ initialService, initialBusiness, initialPa
   function buildRequest(selected: BookingServiceId): BookingRequest {
     return {
       service: selected,
-      schedule: { days, times, timeZone: DISPLAY_TIME_ZONE },
+      schedule: {
+        days,
+        times,
+        timeZone: timeZone.trim() || Intl.DateTimeFormat().resolvedOptions().timeZone,
+      },
       package: initialPackage,
       ...details,
     };
@@ -144,7 +150,7 @@ export default function BookingFlow({ initialService, initialBusiness, initialPa
           {[
             ["Help with", selectedService?.label],
             ["Preferred days", days.length ? days.join(", ") : "No preference"],
-            ["Preferred times (Irish time)", times.length ? times.join(", ") : "No preference"],
+            ["Preferred times (your time zone)", times.length ? times.join(", ") : "No preference"],
             ["Name", details.name],
             ["Business", details.business],
             ["Contact", details.contact],
@@ -278,10 +284,24 @@ export default function BookingFlow({ initialService, initialBusiness, initialPa
                 ))}
               </div>
               <p className="mt-3 text-xs text-slate-500">
-                All times are Irish time (Europe/Dublin). Leave blank if you have no
-                preference.
+                Leave blank if you have no preference.
               </p>
             </fieldset>
+
+            <div className="mt-6">
+              <label htmlFor="booking-timezone" className="text-sm font-semibold text-ink">
+                Your time zone <span className="font-normal text-slate-500">(optional)</span>
+              </label>
+              <input
+                id="booking-timezone"
+                type="text"
+                value={timeZone}
+                autoComplete="off"
+                placeholder="e.g. London, New York, Dubai"
+                onChange={(event) => setTimeZone(event.target.value)}
+                className="mt-2 block h-12 w-full rounded-xl border border-slate-300 bg-white px-3.5 text-base text-ink placeholder:text-slate-400 focus:border-hax focus:outline-none focus-visible:ring-2 focus-visible:ring-hax/30 sm:max-w-sm"
+              />
+            </div>
 
             <StepActions onBack={() => goTo(0)} onNext={() => goTo(2)} />
           </div>
