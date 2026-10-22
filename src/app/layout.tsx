@@ -31,6 +31,8 @@ export const metadata: Metadata = {
     template: `%s | ${SITE_CONFIG.name}`,
   },
   description: SITE_CONFIG.description,
+  // Backup for the DNS TXT verification in Google Search Console (see docs/google-search-console.md).
+  verification: { google: "A7wSRLzMB2e6qNAkKCZ8AsAl7RaLuXO0vtNihLsgFLc" },
   icons: {
     icon: [
       { url: "/icon.svg", type: "image/svg+xml" },
